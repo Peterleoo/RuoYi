@@ -51,8 +51,32 @@
     <!-- 轮播大图 -->
     <section class="carousel">
         <div class="container">
-            <div class="carousel-item">
-                最新杂志封面 / 大学重要活动 / 老龄政策速递
+            <div class="carousel-container">
+                <div class="carousel-items">
+                    <div class="carousel-item active">
+                        <div class="carousel-content">
+                            <h2>最新杂志封面</h2>
+                            <p>2024年第1期 - 关注老年人健康生活</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-content">
+                            <h2>大学重要活动</h2>
+                            <p>长沙市老干部大学建校30周年庆典</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-content">
+                            <h2>老龄政策速递</h2>
+                            <p>湖南省出台新的老年人优待政策</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-indicators">
+                    <button class="active" data-index="0"></button>
+                    <button data-index="1"></button>
+                    <button data-index="2"></button>
+                </div>
             </div>
         </div>
     </section>
@@ -282,5 +306,58 @@
     <!-- 字体控制脚本 -->
     <script src="/portal/js/font-control.js"></script>
     <script src="/portal/js/a11y.js"></script>
+    
+    <!-- 轮播图脚本 -->
+    <script>
+        (function() {
+            const carouselItems = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.carousel-indicators button');
+            let currentIndex = 0;
+            const intervalTime = 5000; // 5秒轮播一次
+            
+            // 初始化轮播
+            function initCarousel() {
+                showSlide(currentIndex);
+                startAutoSlide();
+                bindEvents();
+            }
+            
+            // 显示指定索引的幻灯片
+            function showSlide(index) {
+                // 隐藏所有幻灯片
+                carouselItems.forEach(item => item.classList.remove('active'));
+                // 移除所有指示器的活动状态
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                // 显示当前幻灯片
+                carouselItems[index].classList.add('active');
+                // 激活当前指示器
+                indicators[index].classList.add('active');
+                
+                currentIndex = index;
+            }
+            
+            // 开始自动轮播
+            function startAutoSlide() {
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % carouselItems.length;
+                    showSlide(currentIndex);
+                }, intervalTime);
+            }
+            
+            // 绑定事件
+            function bindEvents() {
+                // 点击指示器切换幻灯片
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        showSlide(index);
+                    });
+                });
+            }
+            
+            // 页面加载完成后初始化
+            document.addEventListener('DOMContentLoaded', initCarousel);
+        })();
+    </script>
 </body>
 </html>
