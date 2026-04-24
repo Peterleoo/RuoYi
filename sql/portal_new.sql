@@ -68,6 +68,28 @@ create table portal_menu (
 ) engine=innodb auto_increment=2000 comment = '菜单管理表';
 
 -- ----------------------------
+-- 4、内容管理表
+-- ----------------------------
+drop table if exists portal_content;
+create table portal_content (
+  content_id          bigint(20)      not null auto_increment    comment '内容ID',
+  title               varchar(255)    not null                   comment '标题',
+  content             text                                       comment '内容',
+  summary             varchar(500)    default ''                 comment '摘要',
+  cover_image         varchar(255)    default ''                 comment '封面图片',
+  category            varchar(50)     default ''                 comment '分类',
+  author              varchar(50)     default ''                 comment '作者',
+  view_count          int(11)         default 0                  comment '浏览次数',
+  status              char(1)         default '0'                comment '状态（0正常 1停用）',
+  create_by           varchar(64)     default ''                 comment '创建者',
+  create_time         datetime                                   comment '创建时间',
+  update_by           varchar(64)     default ''                 comment '更新者',
+  update_time         datetime                                   comment '更新时间',
+  remark              varchar(500)    default null               comment '备注',
+  primary key (content_id)
+) engine=innodb auto_increment=3000 comment = '内容管理表';
+
+-- ----------------------------
 -- 初始化-菜单管理表数据
 -- ----------------------------
 insert into portal_menu values('1', '门户网站', '0', '1', '#',                'M', '0', '', 'fa fa-home',           'admin', sysdate(), '', null, '门户网站目录');

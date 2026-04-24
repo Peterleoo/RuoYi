@@ -4,10 +4,12 @@ import com.ruoyi.portal.domain.PortalMagazine;
 import com.ruoyi.portal.domain.PortalUniversity;
 import com.ruoyi.portal.domain.PortalMember;
 import com.ruoyi.portal.domain.PortalMenu;
+import com.ruoyi.portal.domain.PortalContent;
 import com.ruoyi.portal.service.IPortalMagazineService;
 import com.ruoyi.portal.service.IPortalUniversityService;
 import com.ruoyi.portal.service.IPortalMemberService;
 import com.ruoyi.portal.service.IPortalMenuService;
+import com.ruoyi.portal.service.IPortalContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,6 +39,9 @@ public class PortalAdminController {
 
     @Autowired
     private IPortalMenuService portalMenuService;
+
+    @Autowired
+    private IPortalContentService portalContentService;
 
     /**
      * 杂志管理页面
@@ -202,5 +207,72 @@ public class PortalAdminController {
     @ResponseBody
     public int deleteMenu(Long menuId) {
         return portalMenuService.deletePortalMenuById(menuId);
+    }
+
+    /**
+     * 内容管理页面
+     */
+    @GetMapping("/content")
+    public String content() {
+        return "admin/portal/content";
+    }
+
+    /**
+     * 内容管理列表
+     */
+    @PostMapping("/content/list")
+    @ResponseBody
+    public List<PortalContent> contentList(PortalContent portalContent) {
+        return portalContentService.selectPortalContentList(portalContent);
+    }
+
+    /**
+     * 新增内容
+     */
+    @GetMapping("/content/add")
+    public String addContent() {
+        return "admin/portal/content-add";
+    }
+
+    /**
+     * 新增保存内容
+     */
+    @PostMapping("/content/add")
+    @ResponseBody
+    public int addContentSave(PortalContent portalContent) {
+        return portalContentService.insertPortalContent(portalContent);
+    }
+
+    /**
+     * 修改内容
+     */
+    @GetMapping("/content/edit/{contentId}")
+    public String editContent(@PathVariable("contentId") Long contentId, ModelMap mmap) {
+        mmap.put("content", portalContentService.selectPortalContentById(contentId));
+        return "admin/portal/content-edit";
+    }
+
+    /**
+     * 修改保存内容
+     */
+    @PostMapping("/content/edit")
+    @ResponseBody
+    public int editContentSave(PortalContent portalContent) {
+        return portalContentService.updatePortalContent(portalContent);
+    }
+
+    /**
+     * 删除内容
+     */
+    @PostMapping("/content/remove")
+    @ResponseBody
+    public int removeContent(Long[] contentIds) {
+        int result = 0;
+        if (contentIds != null) {
+            for (Long contentId : contentIds) {
+                result += portalContentService.deletePortalContentById(contentId);
+            }
+        }
+        return result;
     }
 }
