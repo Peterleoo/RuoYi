@@ -1,0 +1,238 @@
+/* 适老化基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+}
+
+/* 字体大小设置 */
+body.font-small {
+    font-size: 14px;
+}
+
+body.font-medium {
+    font-size: 18px;
+}
+
+body.font-large {
+    font-size: 22px;
+}
+
+/* 高对比度样式 */
+body {
+    background-color: #fff;
+    color: #000;
+}
+
+/* 链接样式 */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #004499;
+    text-decoration: underline;
+}
+
+/* 容器样式 */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 头部样式 */
+.header {
+    background-color: #e6f3ff;
+    border-bottom: 3px solid #0066cc;
+    padding: 20px 0;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.nav li a {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* 搜索框样式 */
+.search-box {
+    margin: 20px 0;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    font-size: 1.1em;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 字体调节按钮 */
+.font-controls {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.font-btn {
+    padding: 8px 16px;
+    border: 2px solid #0066cc;
+    background-color: #fff;
+    color: #0066cc;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.font-btn:hover {
+    background-color: #0066cc;
+    color: #fff;
+}
+
+.font-btn.active {
+    background-color: #0066cc;
+    color: #fff;
+}
+
+/* 轮播图样式 */
+.carousel {
+    margin: 30px 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.carousel-item {
+    width: 100%;
+    height: 400px;
+    background-color: #e6f3ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+/* 三栏布局 */
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.sidebar {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.main-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 卡片样式 */
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #0066cc;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e6f3ff;
+    padding-bottom: 10px;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #004499;
+}
+
+/* 页脚样式 */
+.footer {
+    background-color: #e6f3ff;
+    border-top: 3px solid #0066cc;
+    padding: 30px 0;
+    margin-top: 50px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
