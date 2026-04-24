@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 门户网站控制器
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/portal")
 public class PortalController {
 
     /**
      * 首页
      */
-    @GetMapping("index")
+    @GetMapping({"", "index"})
     public String index() {
         return "portal/index";
     }
