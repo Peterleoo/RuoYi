@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMagazineMapper">
+    <resultMap type="com.ruoyi.portal.domain.PortalMagazine" id="PortalMagazineResult">
+        <id property="magazineId" column="magazine_id"/>
+        <result property="magazineTitle" column="magazine_title"/>
+        <result property="magazineCover" column="magazine_cover"/>
+        <result property="magazineIssue" column="magazine_issue"/>
+        <result property="publishDate" column="publish_date"/>
+        <result property="magazineContent" column="magazine_content"/>
+        <result property="magazinePdf" column="magazine_pdf"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPortalMagazineVo">
+        select magazine_id, magazine_title, magazine_cover, magazine_issue, publish_date, magazine_content, magazine_pdf, status, create_by, create_time, update_by, update_time, remark from portal_magazine
+    </sql>
+
+    <select id="selectPortalMagazineById" parameterType="Long" resultMap="PortalMagazineResult">
+        <include refid="selectPortalMagazineVo"/>
+        where magazine_id = #{magazineId}
+    </select>
+
+    <select id="selectPortalMagazineList" parameterType="com.ruoyi.portal.domain.PortalMagazine" resultMap="PortalMagazineResult">
+        <include refid="selectPortalMagazineVo"/>
+        <where>
+            <if test="magazineTitle != null and magazineTitle != ''">
+                and magazine_title like concat('%', #{magazineTitle}, '%')
+            </if>
+            <if test="magazineIssue != null and magazineIssue != ''">
+                and magazine_issue like concat('%', #{magazineIssue}, '%')
+            </if>
+            <if test="publishDate != null">
+                and publish_date = #{publishDate}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertPortalMagazine" parameterType="com.ruoyi.portal.domain.PortalMagazine" useGeneratedKeys="true" keyProperty="magazineId">
+        insert into portal_magazine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="magazineTitle != null">magazine_title,</if>
+            <if test="magazineCover != null">magazine_cover,</if>
+            <if test="magazineIssue != null">magazine_issue,</if>
+            <if test="publishDate != null">publish_date,</if>
+            <if test="magazineContent != null">magazine_content,</if>
+            <if test="magazinePdf != null">magazine_pdf,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="magazineTitle != null">#{magazineTitle},</if>
+            <if test="magazineCover != null">#{magazineCover},</if>
+            <if test="magazineIssue != null">#{magazineIssue},</if>
+            <if test="publishDate != null">#{publishDate},</if>
+            <if test="magazineContent != null">#{magazineContent},</if>
+            <if test="magazinePdf != null">#{magazinePdf},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMagazine" parameterType="com.ruoyi.portal.domain.PortalMagazine">
+        update portal_magazine
+        <set>
+            <if test="magazineTitle != null">magazine_title = #{magazineTitle},</if>
+            <if test="magazineCover != null">magazine_cover = #{magazineCover},</if>
+            <if test="magazineIssue != null">magazine_issue = #{magazineIssue},</if>
+            <if test="publishDate != null">publish_date = #{publishDate},</if>
+            <if test="magazineContent != null">magazine_content = #{magazineContent},</if>
+            <if test="magazinePdf != null">magazine_pdf = #{magazinePdf},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where magazine_id = #{magazineId}
+    </update>
+
+    <delete id="deletePortalMagazineById" parameterType="Long">
+        delete from portal_magazine where magazine_id = #{magazineId}
+    </delete>
+
+    <delete id="deletePortalMagazineByIds" parameterType="Long[]">
+        delete from portal_magazine where magazine_id in
+        <foreach item="magazineId" collection="array" open="(" separator="," close=")">
+            #{magazineId}
+        </foreach>
+    </delete>
+</mapper>

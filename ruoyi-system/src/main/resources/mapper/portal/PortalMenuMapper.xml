@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMenuMapper">
+    <resultMap type="com.ruoyi.portal.domain.PortalMenu" id="PortalMenuResult">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="url" column="url"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="visible" column="visible"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <collection property="children" ofType="com.ruoyi.portal.domain.PortalMenu" resultMap="PortalMenuResult"/>
+    </resultMap>
+
+    <sql id="selectPortalMenuVo">
+        select menu_id, menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark from portal_menu
+    </sql>
+
+    <select id="selectPortalMenuById" parameterType="Long" resultMap="PortalMenuResult">
+        <include refid="selectPortalMenuVo"/>
+        where menu_id = #{menuId}
+    </select>
+
+    <select id="selectPortalMenuList" parameterType="com.ruoyi.portal.domain.PortalMenu" resultMap="PortalMenuResult">
+        <include refid="selectPortalMenuVo"/>
+        <where>
+            <if test="menuName != null and menuName != ''">
+                and menu_name like concat('%', #{menuName}, '%')
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="menuType != null and menuType != ''">
+                and menu_type = #{menuType}
+            </if>
+            <if test="visible != null and visible != ''">
+                and visible = #{visible}
+            </if>
+        </where>
+        order by order_num asc
+    </select>
+
+    <select id="selectPortalMenuTree" resultMap="PortalMenuResult">
+        <include refid="selectPortalMenuVo"/>
+        where parent_id = 0
+        order by order_num asc
+    </select>
+
+    <insert id="insertPortalMenu" parameterType="com.ruoyi.portal.domain.PortalMenu" useGeneratedKeys="true" keyProperty="menuId">
+        insert into portal_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="menuName != null">menu_name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="url != null">url,</if>
+            <if test="menuType != null">menu_type,</if>
+            <if test="visible != null">visible,</if>
+            <if test="perms != null">perms,</if>
+            <if test="icon != null">icon,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="menuName != null">#{menuName},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="url != null">#{url},</if>
+            <if test="menuType != null">#{menuType},</if>
+            <if test="visible != null">#{visible},</if>
+            <if test="perms != null">#{perms},</if>
+            <if test="icon != null">#{icon},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMenu" parameterType="com.ruoyi.portal.domain.PortalMenu">
+        update portal_menu
+        <set>
+            <if test="menuName != null">menu_name = #{menuName},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="menuType != null">menu_type = #{menuType},</if>
+            <if test="visible != null">visible = #{visible},</if>
+            <if test="perms != null">perms = #{perms},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
+
+    <delete id="deletePortalMenuById" parameterType="Long">
+        delete from portal_menu where menu_id = #{menuId}
+    </delete>
+
+    <delete id="deletePortalMenuByIds" parameterType="Long[]">
+        delete from portal_menu where menu_id in
+        <foreach item="menuId" collection="array" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+    </delete>
+</mapper>

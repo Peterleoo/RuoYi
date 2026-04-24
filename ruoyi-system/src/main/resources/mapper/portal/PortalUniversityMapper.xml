@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalUniversityMapper">
+    <resultMap type="com.ruoyi.portal.domain.PortalUniversity" id="PortalUniversityResult">
+        <id property="universityId" column="university_id"/>
+        <result property="universityName" column="university_name"/>
+        <result property="city" column="city"/>
+        <result property="address" column="address"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="website" column="website"/>
+        <result property="universityDesc" column="university_desc"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPortalUniversityVo">
+        select university_id, university_name, city, address, contact_phone, website, university_desc, status, create_by, create_time, update_by, update_time, remark from portal_university
+    </sql>
+
+    <select id="selectPortalUniversityById" parameterType="Long" resultMap="PortalUniversityResult">
+        <include refid="selectPortalUniversityVo"/>
+        where university_id = #{universityId}
+    </select>
+
+    <select id="selectPortalUniversityList" parameterType="com.ruoyi.portal.domain.PortalUniversity" resultMap="PortalUniversityResult">
+        <include refid="selectPortalUniversityVo"/>
+        <where>
+            <if test="universityName != null and universityName != ''">
+                and university_name like concat('%', #{universityName}, '%')
+            </if>
+            <if test="city != null and city != ''">
+                and city like concat('%', #{city}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertPortalUniversity" parameterType="com.ruoyi.portal.domain.PortalUniversity" useGeneratedKeys="true" keyProperty="universityId">
+        insert into portal_university
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="universityName != null">university_name,</if>
+            <if test="city != null">city,</if>
+            <if test="address != null">address,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+            <if test="website != null">website,</if>
+            <if test="universityDesc != null">university_desc,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="universityName != null">#{universityName},</if>
+            <if test="city != null">#{city},</if>
+            <if test="address != null">#{address},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+            <if test="website != null">#{website},</if>
+            <if test="universityDesc != null">#{universityDesc},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalUniversity" parameterType="com.ruoyi.portal.domain.PortalUniversity">
+        update portal_university
+        <set>
+            <if test="universityName != null">university_name = #{universityName},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="website != null">website = #{website},</if>
+            <if test="universityDesc != null">university_desc = #{universityDesc},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where university_id = #{universityId}
+    </update>
+
+    <delete id="deletePortalUniversityById" parameterType="Long">
+        delete from portal_university where university_id = #{universityId}
+    </delete>
+
+    <delete id="deletePortalUniversityByIds" parameterType="Long[]">
+        delete from portal_university where university_id in
+        <foreach item="universityId" collection="array" open="(" separator="," close=")">
+            #{universityId}
+        </foreach>
+    </delete>
+</mapper>

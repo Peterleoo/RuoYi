@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMemberMapper">
+    <resultMap type="com.ruoyi.portal.domain.PortalMember" id="PortalMemberResult">
+        <id property="memberId" column="member_id"/>
+        <result property="memberName" column="member_name"/>
+        <result property="memberType" column="member_type"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="address" column="address"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPortalMemberVo">
+        select member_id, member_name, member_type, phone, email, address, join_date, expire_date, status, create_by, create_time, update_by, update_time, remark from portal_member
+    </sql>
+
+    <select id="selectPortalMemberById" parameterType="Long" resultMap="PortalMemberResult">
+        <include refid="selectPortalMemberVo"/>
+        where member_id = #{memberId}
+    </select>
+
+    <select id="selectPortalMemberList" parameterType="com.ruoyi.portal.domain.PortalMember" resultMap="PortalMemberResult">
+        <include refid="selectPortalMemberVo"/>
+        <where>
+            <if test="memberName != null and memberName != ''">
+                and member_name like concat('%', #{memberName}, '%')
+            </if>
+            <if test="memberType != null and memberType != ''">
+                and member_type = #{memberType}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertPortalMember" parameterType="com.ruoyi.portal.domain.PortalMember" useGeneratedKeys="true" keyProperty="memberId">
+        insert into portal_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberName != null">member_name,</if>
+            <if test="memberType != null">member_type,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="address != null">address,</if>
+            <if test="joinDate != null">join_date,</if>
+            <if test="expireDate != null">expire_date,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberName != null">#{memberName},</if>
+            <if test="memberType != null">#{memberType},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="address != null">#{address},</if>
+            <if test="joinDate != null">#{joinDate},</if>
+            <if test="expireDate != null">#{expireDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMember" parameterType="com.ruoyi.portal.domain.PortalMember">
+        update portal_member
+        <set>
+            <if test="memberName != null">member_name = #{memberName},</if>
+            <if test="memberType != null">member_type = #{memberType},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="joinDate != null">join_date = #{joinDate},</if>
+            <if test="expireDate != null">expire_date = #{expireDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where member_id = #{memberId}
+    </update>
+
+    <delete id="deletePortalMemberById" parameterType="Long">
+        delete from portal_member where member_id = #{memberId}
+    </delete>
+
+    <delete id="deletePortalMemberByIds" parameterType="Long[]">
+        delete from portal_member where member_id in
+        <foreach item="memberId" collection="array" open="(" separator="," close=")">
+            #{memberId}
+        </foreach>
+    </delete>
+</mapper>
