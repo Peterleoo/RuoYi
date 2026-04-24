@@ -56,12 +56,49 @@ public class PortalAdminController {
      * 杂志管理页面
      */
     @GetMapping("/magazine")
-    public String magazine(ModelMap mmap) {
-        // 查询杂志列表
-        PortalMagazine portalMagazine = new PortalMagazine();
-        List<PortalMagazine> magazines = portalMagazineService.selectPortalMagazineList(portalMagazine);
-        mmap.put("magazines", magazines);
+    public String magazine() {
         return "admin/portal/magazine";
+    }
+
+    /**
+     * 杂志管理列表
+     */
+    @PostMapping("/magazine/list")
+    @ResponseBody
+    public List<PortalMagazine> magazineList(PortalMagazine portalMagazine) {
+        return portalMagazineService.selectPortalMagazineList(portalMagazine);
+    }
+
+    /**
+     * 新增杂志页面
+     */
+    @GetMapping("/magazine/add")
+    public String addMagazine() {
+        return "admin/portal/magazine-add";
+    }
+
+    /**
+     * 编辑杂志页面
+     */
+    @GetMapping("/magazine/edit/{magazineId}")
+    public String editMagazine(@PathVariable("magazineId") Long magazineId, ModelMap mmap) {
+        mmap.put("magazine", portalMagazineService.selectPortalMagazineById(magazineId));
+        return "admin/portal/magazine-edit";
+    }
+
+    /**
+     * 删除杂志
+     */
+    @PostMapping("/magazine/remove")
+    @ResponseBody
+    public int removeMagazine(Long[] magazineIds) {
+        int result = 0;
+        if (magazineIds != null) {
+            for (Long magazineId : magazineIds) {
+                result += portalMagazineService.deletePortalMagazineById(magazineId);
+            }
+        }
+        return result;
     }
 
     /**

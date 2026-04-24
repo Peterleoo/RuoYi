@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header" />
+    <th:block th:include="include :: summernote-css" />
+    <th:block th:include="include :: summernote-js" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>修改杂志</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="form-magazine-edit">
+                            <input type="hidden" name="magazineId" th:value="${magazine.magazineId}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">杂志标题：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="magazineTitle" id="magazineTitle" th:value="${magazine.magazineTitle}" placeholder="请输入杂志标题" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">封面图片：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="magazineCover" id="magazineCover" th:value="${magazine.magazineCover}" placeholder="请输入封面图片URL">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">期号：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="magazineIssue" id="magazineIssue" th:value="${magazine.magazineIssue}" placeholder="请输入期号" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">出版日期：</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" name="publishDate" id="publishDate" th:value="${#dates.format(magazine.publishDate, 'yyyy-MM-dd')}" placeholder="请选择出版日期">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">PDF链接：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="magazinePdf" id="magazinePdf" th:value="${magazine.magazinePdf}" placeholder="请输入PDF链接">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">杂志内容：</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="magazineContent" id="magazineContent" rows="10" required th:text="${magazine.magazineContent}"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">状态：</label>
+                                <div class="col-sm-10">
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="status0" name="status" value="0" th:checked="${magazine.status == '0'}">
+                                        <label for="status0"> 正常</label>
+                                    </div>
+                                    <div class="radio radio-inline">
+                                        <input type="radio" id="status1" name="status" value="1" th:checked="${magazine.status == '1'}">
+                                        <label for="status1"> 停用</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">备注：</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="remark" id="remark" rows="3" placeholder="请输入备注" th:text="${magazine.remark}"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-primary" type="submit">保存</button>
+                                    <button class="btn btn-white" type="button" onclick="closeModal()">取消</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        $(function() {
+            // 初始化富文本编辑器
+            $('#magazineContent').summernote({
+                height: 300,
+                placeholder: '请输入杂志内容',
+                lang: 'zh-CN',
+                callbacks: {
+                    onImageUpload: function(files) {
+                        var formData = new FormData();
+                        formData.append('file', files[0]);
+                        formData.append('type', 'image');
+                        
+                        $.ajax({
+                            url: "${ctx}/admin/portal/content/upload",
+                            type: "post",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                if (response.code == 0) {
+                                    $('#magazineContent').summernote('insertImage', response.data.url);
+                                } else {
+                                    $.modal.alertError(response.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            // 表单验证
+            $('#form-magazine-edit').validate({
+                rules: {
+                    magazineTitle: {
+                        required: true,
+                        maxlength: 255
+                    },
+                    magazineIssue: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    magazineContent: {
+                        required: true
+                    }
+                },
+                messages: {
+                    magazineTitle: {
+                        required: "请输入杂志标题",
+                        maxlength: "杂志标题不能超过255个字符"
+                    },
+                    magazineIssue: {
+                        required: "请输入期号",
+                        maxlength: "期号不能超过50个字符"
+                    },
+                    magazineContent: {
+                        required: "请输入杂志内容"
+                    }
+                },
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: "${ctx}/admin/portal/magazine/edit",
+                        type: "post",
+                        data: $(form).serialize(),
+                        success: function(result) {
+                            if (result > 0) {
+                                $.modal.alertSuccess("保存成功");
+                                $.modal.close();
+                                parent.initTable();
+                            } else {
+                                $.modal.alertError("保存失败");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        function closeModal() {
+            $.modal.close();
+        }
+    </script>
+</body>
+</html>
