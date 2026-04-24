@@ -71,10 +71,10 @@ create table portal_menu (
 -- 初始化-菜单管理表数据
 -- ----------------------------
 insert into portal_menu values('1', '门户网站', '0', '1', '#',                'M', '0', '', 'fa fa-home',           'admin', sysdate(), '', null, '门户网站目录');
-insert into portal_menu values('100',  '首页', '1', '1', '/portal/index',          'C', '0', '', 'fa fa-home',          'admin', sysdate(), '', null, '首页菜单');
-insert into portal_menu values('101',  '杂志天地', '1', '2', '/portal/magazine',          'C', '0', '', 'fa fa-book',     'admin', sysdate(), '', null, '杂志天地菜单');
-insert into portal_menu values('102',  '大学联盟', '1', '3', '/portal/university',          'C', '0', '', 'fa fa-graduation-cap',         'admin', sysdate(), '', null, '大学联盟菜单');
-insert into portal_menu values('103',  '会员中心', '1', '4', '/portal/member',          'C', '0', '', 'fa fa-user',         'admin', sysdate(), '', null, '会员中心菜单');
-insert into portal_menu values('104',  '银龄动态', '1', '5', '/portal/news',          'C', '0', '', 'fa fa-newspaper-o',  'admin', sysdate(), '', null, '银龄动态菜单');
-insert into portal_menu values('105',  '老干部大学协会', '1', '6', '/portal/association',        '', 'C', '0', '', 'fa fa-users',           'admin', sysdate(), '', null, '老干部大学协会菜单');
-insert into portal_menu values('106',  '联系我们', '1', '7', '/portal/contact',        '', 'C', '0', '', 'fa fa-phone',        'admin', sysdate(), '', null, '联系我们菜单');
+insert into portal_menu values('100',  '首页', '1', '1', '/index',          'C', '0', '', 'fa fa-home',          'admin', sysdate(), '', null, '首页菜单');
+insert into portal_menu values('101',  '杂志天地', '1', '2', '/magazine',          'C', '0', '', 'fa fa-book',     'admin', sysdate(), '', null, '杂志天地菜单');
+insert into portal_menu values('102',  '大学联盟', '1', '3', '/university',          'C', '0', '', 'fa fa-graduation-cap',         'admin', sysdate(), '', null, '大学联盟菜单');
+insert into portal_menu values('103',  '会员中心', '1', '4', '/member',          'C', '0', '', 'fa fa-user',         'admin', sysdate(), '', null, '会员中心菜单');
+insert into portal_menu values('104',  '银龄动态', '1', '5', '/news',          'C', '0', '', 'fa fa-newspaper-o',  'admin', sysdate(), '', null, '银龄动态菜单');
+insert into portal_menu values('105',  '老干部大学协会', '1', '6', '/association',        'C', '0', '', 'fa fa-users',           'admin', sysdate(), '', null, '老干部大学协会菜单');
+insert into portal_menu values('106',  '联系我们', '1', '7', '/contact',        'C', '0', '', 'fa fa-phone',        'admin', sysdate(), '', null, '联系我们菜单');

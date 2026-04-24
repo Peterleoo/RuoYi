@@ -29,7 +29,7 @@ import com.ruoyi.system.service.ISysMenuService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/system/menu")
+@RequestMapping("/admin/system/menu")
 public class SysMenuController extends BaseController
 {
     private String prefix = "system/menu";

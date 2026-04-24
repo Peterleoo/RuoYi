@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PortalController {
 
     /**
+     * 根路径 - 直接跳转到官网首页
+     */
+    @GetMapping("")
+    public String root() {
+        return "portal/index";
+    }
+
+    /**
      * 首页
      */
     @GetMapping("index")

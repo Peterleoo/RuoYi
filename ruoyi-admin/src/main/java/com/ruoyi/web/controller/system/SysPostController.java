@@ -26,7 +26,7 @@ import com.ruoyi.system.service.ISysPostService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/system/post")
+@RequestMapping("/admin/system/post")
 public class SysPostController extends BaseController
 {
     private String prefix = "system/post";

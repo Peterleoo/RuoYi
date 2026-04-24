@@ -37,7 +37,7 @@ public class SysLoginController extends BaseController
     @Autowired
     private ConfigService configService;
 
-    @GetMapping("/login")
+    @GetMapping("/admin/login")
     public String login(HttpServletRequest request, HttpServletResponse response, ModelMap mmap)
     {
         // 如果是Ajax请求，返回Json字符串。
@@ -52,7 +52,7 @@ public class SysLoginController extends BaseController
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/admin/login")
     @ResponseBody
     public AjaxResult ajaxLogin(String username, String password, Boolean rememberMe)
     {
@@ -74,7 +74,7 @@ public class SysLoginController extends BaseController
         }
     }
 
-    @GetMapping("/unauth")
+    @GetMapping("/admin/unauth")
     public String unauth()
     {
         return "error/unauth";

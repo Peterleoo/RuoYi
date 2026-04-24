@@ -41,7 +41,7 @@ import com.ruoyi.system.service.ISysUserService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/system/user")
+@RequestMapping("/admin/system/user")
 public class SysUserController extends BaseController
 {
     private String prefix = "system/user";

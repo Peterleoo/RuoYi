@@ -34,7 +34,7 @@ import com.ruoyi.system.service.ISysUserService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/system/role")
+@RequestMapping("/admin/system/role")
 public class SysRoleController extends BaseController
 {
     private String prefix = "system/role";

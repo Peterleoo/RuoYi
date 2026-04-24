@@ -26,17 +26,17 @@ public class SysRegisterController extends BaseController
     @Autowired
     private ISysConfigService configService;
 
-    @GetMapping("/register")
+    @GetMapping("/admin/register")
     public String register()
     {
         return "register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/admin/register")
     @ResponseBody
     public AjaxResult ajaxRegister(SysUser user)
     {
-        if (!("true".equals(configService.selectConfigByKey("sys.account.registerUser"))))
+        if (!"true".equals(configService.selectConfigByKey("sys.account.registerUser")))
         {
             return error("当前系统没有开启注册功能！");
         }
