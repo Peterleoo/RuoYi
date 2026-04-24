@@ -20,6 +20,10 @@ public class PortalContent {
     private Long updateBy;
     private Date updateTime;
     private String remark;
+    private String mediaType; // 媒体类型：video, audio, pdf, text
+    private String mediaUrl; // 媒体文件URL
+    private String mediaDuration; // 媒体时长（用于视频和音频）
+    private String mediaSize; // 媒体文件大小
 
     // getters and setters
     public Long getContentId() {
@@ -132,5 +136,37 @@ public class PortalContent {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public String getMediaDuration() {
+        return mediaDuration;
+    }
+
+    public void setMediaDuration(String mediaDuration) {
+        this.mediaDuration = mediaDuration;
+    }
+
+    public String getMediaSize() {
+        return mediaSize;
+    }
+
+    public void setMediaSize(String mediaSize) {
+        this.mediaSize = mediaSize;
     }
 }

@@ -54,6 +54,36 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-2 control-label">媒体类型：</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="mediaType" id="mediaType">
+                                        <option value="text">文本</option>
+                                        <option value="video">视频</option>
+                                        <option value="audio">音频</option>
+                                        <option value="pdf">PDF</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">媒体文件：</label>
+                                <div class="col-sm-10">
+                                    <input type="file" class="form-control" id="mediaFile" placeholder="请选择媒体文件">
+                                    <input type="hidden" name="mediaUrl" id="mediaUrl">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">媒体时长：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="mediaDuration" id="mediaDuration" placeholder="请输入媒体时长（如：00:05:30）">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">媒体大小：</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="mediaSize" id="mediaSize" placeholder="请输入媒体文件大小（如：10MB）">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-sm-2 control-label">内容：</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" name="content" id="content" rows="10" required></textarea>
@@ -97,7 +127,21 @@
             $('#content').summernote({
                 height: 300,
                 placeholder: '请输入内容',
-                lang: 'zh-CN'
+                lang: 'zh-CN',
+                callbacks: {
+                    onImageUpload: function(files) {
+                        // 处理图片上传
+                        uploadFile(files[0], 'image');
+                    }
+                }
+            });
+
+            // 媒体文件上传
+            $('#mediaFile').change(function() {
+                var file = this.files[0];
+                if (file) {
+                    uploadFile(file, 'media');
+                }
             });
 
             // 表单验证
@@ -154,6 +198,35 @@
                 }
             });
         });
+
+        function uploadFile(file, type) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('type', type);
+            
+            $.ajax({
+                url: "${ctx}/admin/portal/content/upload",
+                type: "post",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.code == 0) {
+                        if (type == 'image') {
+                            $('#content').summernote('insertImage', response.data.url);
+                        } else {
+                            // 处理视频、音频、PDF等文件
+                            $('#mediaUrl').val(response.data.url);
+                            // 自动填充媒体大小
+                            var size = (file.size / (1024 * 1024)).toFixed(2) + 'MB';
+                            $('#mediaSize').val(size);
+                        }
+                    } else {
+                        $.modal.alertError(response.msg);
+                    }
+                }
+            });
+        }
 
         function closeModal() {
             $.modal.close();

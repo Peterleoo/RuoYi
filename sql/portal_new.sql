@@ -86,6 +86,10 @@ create table portal_content (
   update_by           varchar(64)     default ''                 comment '更新者',
   update_time         datetime                                   comment '更新时间',
   remark              varchar(500)    default null               comment '备注',
+  media_type          varchar(20)     default ''                 comment '媒体类型：video, audio, pdf, text',
+  media_url           varchar(255)    default ''                 comment '媒体文件URL',
+  media_duration      varchar(20)     default ''                 comment '媒体时长',
+  media_size          varchar(20)     default ''                 comment '媒体文件大小',
   primary key (content_id)
 ) engine=innodb auto_increment=3000 comment = '内容管理表';
 
