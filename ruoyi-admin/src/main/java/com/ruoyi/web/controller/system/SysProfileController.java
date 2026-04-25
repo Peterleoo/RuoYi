@@ -31,7 +31,7 @@ import com.ruoyi.system.service.ISysUserService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/admin/system/user/profile")
+@RequestMapping({ "/admin/system/user/profile", "/system/user/profile" })
 public class SysProfileController extends BaseController
 {
     private static final Logger log = LoggerFactory.getLogger(SysProfileController.class);

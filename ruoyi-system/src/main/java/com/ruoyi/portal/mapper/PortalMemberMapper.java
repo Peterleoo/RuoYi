@@ -16,6 +16,14 @@ public interface PortalMemberMapper {
     public PortalMember selectPortalMemberById(Long memberId);
 
     /**
+     * 根据登录账号查询会员
+     * 
+     * @param loginName 登录账号
+     * @return 会员管理
+     */
+    public PortalMember selectPortalMemberByLoginName(String loginName);
+
+    /**
      * 查询会员管理列表
      * 
      * @param portalMember 会员管理

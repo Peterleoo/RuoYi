@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalSchoolMapper">
+
+    <resultMap id="PortalSchoolResult" type="com.ruoyi.portal.domain.PortalSchool">
+        <id property="schoolId" column="school_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="schoolName" column="school_name"/>
+        <result property="logo" column="logo"/>
+        <result property="introduction" column="introduction"/>
+        <result property="address" column="address"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="transportGuide" column="transport_guide"/>
+        <result property="enrollmentBrochure" column="enrollment_brochure"/>
+        <result property="coverImage" column="cover_image"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPortalSchoolVo">
+        select school_id, dept_id, school_name, logo, introduction, address, longitude, latitude,
+               contact_phone, transport_guide, enrollment_brochure, cover_image, status, create_by,
+               create_time, update_by, update_time, remark
+        from portal_school
+    </sql>
+
+    <select id="selectPortalSchoolById" parameterType="Long" resultMap="PortalSchoolResult">
+        <include refid="selectPortalSchoolVo"/>
+        where school_id = #{schoolId}
+    </select>
+
+    <select id="selectPortalSchoolList" parameterType="com.ruoyi.portal.domain.PortalSchool" resultMap="PortalSchoolResult">
+        <include refid="selectPortalSchoolVo"/>
+        <where>
+            <if test="schoolName != null and schoolName != ''">
+                and school_name like concat('%', #{schoolName}, '%')
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by school_id desc
+    </select>
+
+    <insert id="insertPortalSchool" parameterType="com.ruoyi.portal.domain.PortalSchool" useGeneratedKeys="true" keyProperty="schoolId">
+        insert into portal_school
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="schoolName != null">school_name,</if>
+            <if test="logo != null">logo,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="address != null">address,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+            <if test="transportGuide != null">transport_guide,</if>
+            <if test="enrollmentBrochure != null">enrollment_brochure,</if>
+            <if test="coverImage != null">cover_image,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="schoolName != null">#{schoolName},</if>
+            <if test="logo != null">#{logo},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="address != null">#{address},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+            <if test="transportGuide != null">#{transportGuide},</if>
+            <if test="enrollmentBrochure != null">#{enrollmentBrochure},</if>
+            <if test="coverImage != null">#{coverImage},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalSchool" parameterType="com.ruoyi.portal.domain.PortalSchool">
+        update portal_school
+        <set>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="schoolName != null">school_name = #{schoolName},</if>
+            <if test="logo != null">logo = #{logo},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="transportGuide != null">transport_guide = #{transportGuide},</if>
+            <if test="enrollmentBrochure != null">enrollment_brochure = #{enrollmentBrochure},</if>
+            <if test="coverImage != null">cover_image = #{coverImage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where school_id = #{schoolId}
+    </update>
+
+    <delete id="deletePortalSchoolById" parameterType="Long">
+        delete from portal_school where school_id = #{schoolId}
+    </delete>
+
+    <delete id="deletePortalSchoolByIds" parameterType="Long[]">
+        delete from portal_school where school_id in
+        <foreach item="schoolId" collection="array" open="(" separator="," close=")">
+            #{schoolId}
+        </foreach>
+    </delete>
+
+</mapper>
+

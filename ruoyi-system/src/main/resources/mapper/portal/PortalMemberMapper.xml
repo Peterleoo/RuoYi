@@ -5,10 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.portal.mapper.PortalMemberMapper">
     <resultMap type="com.ruoyi.portal.domain.PortalMember" id="PortalMemberResult">
         <id property="memberId" column="member_id"/>
+        <result property="loginName" column="login_name"/>
         <result property="memberName" column="member_name"/>
         <result property="memberType" column="member_type"/>
         <result property="phone" column="phone"/>
         <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
         <result property="address" column="address"/>
         <result property="joinDate" column="join_date"/>
         <result property="expireDate" column="expire_date"/>
@@ -21,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPortalMemberVo">
-        select member_id, member_name, member_type, phone, email, address, join_date, expire_date, status, create_by, create_time, update_by, update_time, remark from portal_member
+        select member_id, login_name, member_name, member_type, phone, email, password, salt, address, join_date, expire_date, status, create_by, create_time, update_by, update_time, remark from portal_member
     </sql>
 
     <select id="selectPortalMemberById" parameterType="Long" resultMap="PortalMemberResult">
@@ -29,9 +32,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where member_id = #{memberId}
     </select>
 
+    <select id="selectPortalMemberByLoginName" parameterType="String" resultMap="PortalMemberResult">
+        <include refid="selectPortalMemberVo"/>
+        where login_name = #{loginName}
+    </select>
+
     <select id="selectPortalMemberList" parameterType="com.ruoyi.portal.domain.PortalMember" resultMap="PortalMemberResult">
         <include refid="selectPortalMemberVo"/>
         <where>
+            <if test="loginName != null and loginName != ''">
+                and login_name like concat('%', #{loginName}, '%')
+            </if>
             <if test="memberName != null and memberName != ''">
                 and member_name like concat('%', #{memberName}, '%')
             </if>
@@ -53,10 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertPortalMember" parameterType="com.ruoyi.portal.domain.PortalMember" useGeneratedKeys="true" keyProperty="memberId">
         insert into portal_member
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">login_name,</if>
             <if test="memberName != null">member_name,</if>
             <if test="memberType != null">member_type,</if>
             <if test="phone != null">phone,</if>
             <if test="email != null">email,</if>
+            <if test="password != null">password,</if>
+            <if test="salt != null">salt,</if>
             <if test="address != null">address,</if>
             <if test="joinDate != null">join_date,</if>
             <if test="expireDate != null">expire_date,</if>
@@ -68,10 +82,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">#{loginName},</if>
             <if test="memberName != null">#{memberName},</if>
             <if test="memberType != null">#{memberType},</if>
             <if test="phone != null">#{phone},</if>
             <if test="email != null">#{email},</if>
+            <if test="password != null">#{password},</if>
+            <if test="salt != null">#{salt},</if>
             <if test="address != null">#{address},</if>
             <if test="joinDate != null">#{joinDate},</if>
             <if test="expireDate != null">#{expireDate},</if>
@@ -87,10 +104,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePortalMember" parameterType="com.ruoyi.portal.domain.PortalMember">
         update portal_member
         <set>
+            <if test="loginName != null">login_name = #{loginName},</if>
             <if test="memberName != null">member_name = #{memberName},</if>
             <if test="memberType != null">member_type = #{memberType},</if>
             <if test="phone != null">phone = #{phone},</if>
             <if test="email != null">email = #{email},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="salt != null">salt = #{salt},</if>
             <if test="address != null">address = #{address},</if>
             <if test="joinDate != null">join_date = #{joinDate},</if>
             <if test="expireDate != null">expire_date = #{expireDate},</if>

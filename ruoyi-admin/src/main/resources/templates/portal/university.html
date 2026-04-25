@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,19 +17,19 @@
                 <!-- 导航菜单 -->
                 <nav>
                     <ul class="nav">
-                        <li><a href="/portal/index">首页</a></li>
-                        <li><a href="/portal/magazine">杂志天地</a></li>
-                        <li><a href="/portal/university">大学联盟</a></li>
-                        <li><a href="/portal/member">会员中心</a></li>
-                        <li><a href="/portal/news">银龄动态</a></li>
-                        <li><a href="/portal/association">老干部大学协会</a></li>
-                        <li><a href="/portal/contact">联系我们</a></li>
+                        <li><a th:href="@{/portal/index}">首页</a></li>
+                        <li><a th:href="@{/portal/magazine}">杂志天地</a></li>
+                        <li><a th:href="@{/portal/university}">大学联盟</a></li>
+                        <li><a th:href="@{/portal/member}">会员中心</a></li>
+                        <li><a th:href="@{/portal/news}">银龄动态</a></li>
+                        <li><a th:href="@{/portal/association}">老干部大学协会</a></li>
+                        <li><a th:href="@{/portal/contact}">联系我们</a></li>
                     </ul>
                 </nav>
                 
                 <!-- 右侧功能区 -->
                 <div class="header-right">
-                    <a href="/portal/login" class="login-link">登录/注册</a>
+                    <a th:href="@{/portal/login}" class="login-link">登录/注册</a>
                 </div>
             </div>
             
@@ -98,31 +98,16 @@
             <div class="card">
                 <h3 class="card-title">大学联盟成员</h3>
                 <div class="universities-grid">
-                    <!-- 长沙市老干部大学 -->
-                    <div class="university-card">
-                        <h4>长沙市老干部大学</h4>
-                        <p>地址：长沙市岳麓区岳麓大道218号</p>
-                        <p>联系方式：XXX-XXXXXXX</p>
-                        <a href="/portal/university/detail/1" class="btn btn-primary">查看详情</a>
+                    <div class="university-card" th:if="${#lists.isEmpty(schools)}">
+                        <h4>暂无学校数据</h4>
+                        <p>请先在后台「学校管理」中新增学校信息。</p>
                     </div>
-                    
-                    <!-- 株洲市老干部大学 -->
-                    <div class="university-card">
-                        <h4>株洲市老干部大学</h4>
-                        <p>地址：株洲市天元区长江北路1号</p>
-                        <p>联系方式：XXX-XXXXXXX</p>
-                        <a href="/portal/university/detail/2" class="btn btn-primary">查看详情</a>
+                    <div class="university-card" th:each="school : ${schools}">
+                        <h4 th:text="${school.schoolName}">学校名称</h4>
+                        <p>地址：<span th:text="${school.address} ?: '暂无地址'">暂无地址</span></p>
+                        <p>联系方式：<span th:text="${school.contactPhone} ?: '暂无联系方式'">暂无联系方式</span></p>
+                        <a th:href="@{/portal/university/detail/{id}(id=${school.schoolId})}" class="btn btn-primary">查看详情</a>
                     </div>
-                    
-                    <!-- 湘潭市老干部大学 -->
-                    <div class="university-card">
-                        <h4>湘潭市老干部大学</h4>
-                        <p>地址：湘潭市岳塘区建设中路1号</p>
-                        <p>联系方式：XXX-XXXXXXX</p>
-                        <a href="/portal/university/detail/3" class="btn btn-primary">查看详情</a>
-                    </div>
-                    
-                    <!-- 其他市州大学... -->
                 </div>
             </div>
         </div>
@@ -155,10 +140,10 @@
                 <div class="footer-item">
                     <h4>网站导航</h4>
                     <ul class="footer-nav">
-                        <li><a href="/portal/index">首页</a></li>
-                        <li><a href="/portal/magazine">杂志天地</a></li>
-                        <li><a href="/portal/university">大学联盟</a></li>
-                        <li><a href="/portal/member">会员中心</a></li>
+                        <li><a th:href="@{/portal/index}">首页</a></li>
+                        <li><a th:href="@{/portal/magazine}">杂志天地</a></li>
+                        <li><a th:href="@{/portal/university}">大学联盟</a></li>
+                        <li><a th:href="@{/portal/member}">会员中心</a></li>
                     </ul>
                 </div>
             </div>
@@ -166,7 +151,7 @@
             <!-- 底部信息 -->
             <div class="footer-bottom">
                 <p>© 2024 湖南老年人杂志社有限责任公司 版权所有</p>
-                <p><a href="/portal/privacy">隐私政策</a> | <a href="/portal/terms">使用协议</a></p>
+                <p><a th:href="@{/portal/privacy}">隐私政策</a> | <a th:href="@{/portal/terms}">使用协议</a></p>
             </div>
         </div>
     </footer>

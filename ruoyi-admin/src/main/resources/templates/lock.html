@@ -32,7 +32,7 @@
     
     <div class="help-block text-center" style="margin-top: 50px;">系统锁屏,请输入密码登录!</div>
     <div class="text-center">
-        <a th:href="@{logout}">退出重新登录</a>
+        <a th:href="@{/logout}">退出重新登录</a>
     </div>
 </div>
 <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
@@ -42,7 +42,7 @@
 <script src="../static/ruoyi/js/ry-ui.js" th:src="@{/ruoyi/js/ry-ui.js?v=4.8.3}"></script>
 </body>
 <script th:inline="javascript">
-    var ctx = [[@{/}]];
+    var ctx = /*[[@{/}]]*/ '';
     Date.prototype.format = function(fmt) {
 	  var o = {
 	    "M+" : this.getMonth()+1,                 //月份
@@ -102,7 +102,7 @@
             },
             success: function(result) {
                 if (result.code == web_status.SUCCESS) {
-                    location.href = ctx + 'index';
+                    location.href = ctx + 'admin/index';
                 } else {
                     $.modal.msg(result.msg);
                     $("input[name='password']").val("");

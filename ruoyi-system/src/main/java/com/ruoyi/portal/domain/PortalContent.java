@@ -1,19 +1,27 @@
 package com.ruoyi.portal.domain;
 
 import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 内容管理实体类
  */
 public class PortalContent {
     private Long contentId;
+    private Long categoryId;
+    private Long schoolId;
     private String title;
+    private String subTitle;
     private String content;
     private String summary;
     private String coverImage;
     private String category;
     private String author;
+    private String source;
     private Integer viewCount;
+    private String auditStatus;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private Date publishTime;
     private String status;
     private Long createBy;
     private Date createTime;
@@ -24,6 +32,7 @@ public class PortalContent {
     private String mediaUrl; // 媒体文件URL
     private String mediaDuration; // 媒体时长（用于视频和音频）
     private String mediaSize; // 媒体文件大小
+    private String schoolName;
 
     // getters and setters
     public Long getContentId() {
@@ -34,12 +43,36 @@ public class PortalContent {
         this.contentId = contentId;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Long getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(Long schoolId) {
+        this.schoolId = schoolId;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
     }
 
     public String getContent() {
@@ -82,12 +115,36 @@ public class PortalContent {
         this.author = author;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public Integer getViewCount() {
         return viewCount;
     }
 
     public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public String getAuditStatus() {
+        return auditStatus;
+    }
+
+    public void setAuditStatus(String auditStatus) {
+        this.auditStatus = auditStatus;
+    }
+
+    public Date getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
 
     public String getStatus() {
@@ -168,5 +225,13 @@ public class PortalContent {
 
     public void setMediaSize(String mediaSize) {
         this.mediaSize = mediaSize;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 }

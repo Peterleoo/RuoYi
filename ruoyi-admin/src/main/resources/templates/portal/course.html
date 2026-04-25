@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线课程 - 湖南老年人杂志社</title>
+    <link rel="stylesheet" href="/portal/css/style.css">
+</head>
+<body class="font-medium">
+<section class="page-title">
+    <div class="container"><h1>在线课程</h1></div>
+</section>
+<section class="content-section">
+    <div class="container">
+        <div class="card portal-card">
+            <div class="section-title-wrap">
+                <h3 class="card-title">课程中心</h3>
+                <a class="more-link" th:href="@{/portal/university}">查看学校</a>
+            </div>
+            <p class="portal-muted">汇聚各地老干部大学精品课程，支持线上学习与线下报名。</p>
+            <div class="empty-state" th:if="${#lists.isEmpty(courses)}">
+                <h5>暂无课程数据</h5>
+                <p>请先在后台「课程管理」中新增课程。</p>
+            </div>
+            <div class="portal-course-grid" th:if="${!#lists.isEmpty(courses)}">
+                <article class="portal-course-card" th:each="course : ${courses}">
+                    <div class="portal-course-head">
+                        <h5 th:text="${course.courseName}">课程名称</h5>
+                        <span class="portal-tag" th:text="${course.courseCategory} ?: '未分类'">未分类</span>
+                    </div>
+                    <p class="portal-course-intro" th:text="${course.courseIntro} ?: '暂无课程简介'">暂无课程简介</p>
+                    <div class="portal-course-meta">
+                        <span>学校：<em th:text="${course.schoolName} ?: '未知学校'">未知学校</em></span>
+                        <span>讲师：<em th:text="${course.teacherName} ?: '待分配'">待分配</em></span>
+                        <span>时间：<em th:text="${course.classSchedule} ?: '暂无'">暂无</em></span>
+                        <span>学费：<em th:text="${course.tuitionFee} ?: '0.00'">0.00</em></span>
+                        <span>招生：<em th:text="${course.enrollmentStatus == '0' ? '招生中' : (course.enrollmentStatus == '1' ? '已招满' : (course.enrollmentStatus == '2' ? '已结束' : '未设置'))}">未设置</em></span>
+                    </div>
+                    <p class="portal-course-link" th:if="${course.replayVideoUrl != null and course.replayVideoUrl != ''}">
+                        <a th:href="${course.replayVideoUrl}" target="_blank">查看录播视频</a>
+                    </p>
+                </article>
+            </div>
+            <p class="portal-action-row">
+                <a class="btn btn-primary" th:href="@{/portal/university}">查看大学联盟</a>
+            </p>
+        </div>
+    </div>
+</section>
+<script src="/portal/js/font-control.js"></script>
+<script src="/portal/js/a11y.js"></script>
+</body>
+</html>

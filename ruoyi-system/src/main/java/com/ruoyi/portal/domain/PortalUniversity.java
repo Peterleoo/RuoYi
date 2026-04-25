@@ -1,6 +1,6 @@
 package com.ruoyi.portal.domain;
 
-import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

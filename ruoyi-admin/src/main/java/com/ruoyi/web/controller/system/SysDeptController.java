@@ -28,7 +28,7 @@ import com.ruoyi.system.service.ISysDeptService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/admin/system/dept")
+@RequestMapping({ "/admin/system/dept", "/system/dept" })
 public class SysDeptController extends BaseController
 {
     private String prefix = "system/dept";

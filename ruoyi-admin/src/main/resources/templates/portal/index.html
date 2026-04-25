@@ -48,169 +48,224 @@
         </div>
     </header>
 
-    <!-- 轮播大图 -->
-    <section class="carousel">
+    <!-- 核心展示区 -->
+    <section class="hero-section">
         <div class="container">
-            <div class="carousel-container">
-                <div class="carousel-items">
-                    <div class="carousel-item active">
-                        <div class="carousel-content">
-                            <h2>最新杂志封面</h2>
-                            <p>2024年第1期 - 关注老年人健康生活</p>
+            <div class="hero-grid">
+                <!-- 轮播图 -->
+                <div class="carousel-box">
+                    <div class="carousel-container">
+                        <div class="carousel-items">
+                            <div class="carousel-item active" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/portal/img/banner1.jpg') center/cover;">
+                                <div class="carousel-content">
+                                    <span class="tag">最新刊物</span>
+                                    <h2>2024年第5期《银龄生活》</h2>
+                                    <p>关注数字化时代的老年幸福感，探索智慧养老新模式。</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/portal/img/banner2.jpg') center/cover;">
+                                <div class="carousel-content">
+                                    <span class="tag">要闻通知</span>
+                                    <h2>全省老年大学书法大赛作品征集</h2>
+                                    <p>传承中华文化，展现翰墨风采。报名截止日期：12月1日。</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="carousel-content">
-                            <h2>大学重要活动</h2>
-                            <p>长沙市老干部大学建校30周年庆典</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="carousel-content">
-                            <h2>老龄政策速递</h2>
-                            <p>湖南省出台新的老年人优待政策</p>
+                        <div class="carousel-indicators">
+                            <button class="active" data-index="0"></button>
+                            <button data-index="1"></button>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-indicators">
-                    <button class="active" data-index="0"></button>
-                    <button data-index="1"></button>
-                    <button data-index="2"></button>
+
+                <!-- 今日推荐 -->
+                <div class="today-recommend">
+                    <div class="recommend-card">
+                        <div class="recommend-header-box">
+                            <i class="fa fa-star text-warning"></i> 今日特别推荐
+                        </div>
+                        <div class="recommend-body">
+                            <div class="recommend-image" style="background: url('/portal/img/recommend.jpg') center/cover;"></div>
+                            <h4 class="recommend-title">《智能手机使用全攻略》</h4>
+                            <p class="recommend-desc">本期课程将为您详细解析微信支付安全、扫码乘车等实用技巧...</p>
+                            <a href="#" class="btn-lean">立即学习 <i class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <!-- 快速入口 -->
+            <div class="quick-nav">
+                <a href="/portal/magazine/subscribe" class="nav-item">
+                    <div class="icon-box color-1"><i class="fa fa-book"></i></div>
+                    <span>杂志订阅</span>
+                </a>
+                <a href="/portal/university/search" class="nav-item">
+                    <div class="icon-box color-2"><i class="fa fa-university"></i></div>
+                    <span>大学查询</span>
+                </a>
+                <a href="/portal/download" class="nav-item">
+                    <div class="icon-box color-3"><i class="fa fa-download"></i></div>
+                    <span>资料下载</span>
+                </a>
+                <a href="/portal/course" class="nav-item">
+                    <div class="icon-box color-4"><i class="fa fa-play-circle"></i></div>
+                    <span>在线课程</span>
+                </a>
+                <a href="/portal/activity" class="nav-item">
+                    <div class="icon-box color-5"><i class="fa fa-calendar-check-o"></i></div>
+                    <span>活动报名</span>
+                </a>
+                <a href="/portal/contact" class="nav-item">
+                    <div class="icon-box color-6"><i class="fa fa-phone-square"></i></div>
+                    <span>服务热线</span>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- 快速入口 -->
-    <section class="quick-access">
+    <!-- 信息聚合区 -->
+    <section class="content-section">
         <div class="container">
-            <div class="quick-entry">
-                <div class="entry-item">
-                    <a href="/portal/magazine/subscribe">
-                        <div class="entry-icon">杂志订阅</div>
-                    </a>
-                </div>
-                <div class="entry-item">
-                    <a href="/portal/university/search">
-                        <div class="entry-icon">大学查询</div>
-                    </a>
-                </div>
-                <div class="entry-item">
-                    <a href="/portal/download">
-                        <div class="entry-icon">资料下载</div>
-                    </a>
-                </div>
-                <div class="entry-item">
-                    <a href="/portal/course">
-                        <div class="entry-icon">在线课程</div>
-                    </a>
-                </div>
-                <div class="entry-item">
-                    <a href="/portal/activity">
-                        <div class="entry-icon">活动报名</div>
-                    </a>
-                </div>
-                <div class="entry-item">
-                    <a href="/portal/contact">
-                        <div class="entry-icon">服务热线</div>
-                    </a>
-                </div>
+            <!-- 最新动态大标题 -->
+            <div class="section-title-wrap">
+                <h3 class="section-title">最新动态</h3>
             </div>
-        </div>
-    </section>
 
-    <!-- 中部内容聚合区 -->
-    <section class="content-wrapper">
-        <div class="container">
+            <!-- 最新动态卡片组 -->
             <div class="content-grid">
-                <!-- 左侧栏：杂志动态 -->
-                <div class="sidebar left-sidebar">
-                    <div class="card">
-                        <h3 class="card-title">杂志动态</h3>
-                        <ul class="news-list">
-                            <li><a href="#">杂志社新闻标题1</a></li>
-                            <li><a href="#">杂志社新闻标题2</a></li>
-                            <li><a href="#">杂志社新闻标题3</a></li>
-                        </ul>
+                <!-- 卡片 1：杂志动态 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span><i class="fa fa-newspaper-o"></i> 杂志动态</span>
                     </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">往期精选</h3>
-                        <div class="carousel">
-                            <div class="carousel-item">往期杂志封面1</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">热门作者</h3>
-                        <ul class="author-list">
-                            <li><a href="#">作者姓名1</a></li>
-                            <li><a href="#">作者姓名2</a></li>
-                            <li><a href="#">作者姓名3</a></li>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="#">杂志社新闻：2024年度十佳采编出炉</a></li>
+                            <li><a href="#">往期精选：探寻湘西少数民族文化</a></li>
+                            <li><a href="#">热门作者：专访张老伯的摄影世界</a></li>
                         </ul>
                     </div>
                 </div>
-                
-                <!-- 中间栏：大学信息 -->
-                <div class="main-content">
-                    <div class="card">
-                        <h3 class="card-title">大学动态</h3>
-                        <ul class="news-list">
-                            <li><a href="#">大学活动新闻标题1</a></li>
-                            <li><a href="#">大学活动新闻标题2</a></li>
-                            <li><a href="#">大学活动新闻标题3</a></li>
-                        </ul>
+                <!-- 卡片 2：大学信息 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span><i class="fa fa-graduation-cap"></i> 大学信息</span>
                     </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">推荐大学</h3>
-                        <div class="carousel">
-                            <div class="carousel-item">推荐大学展示</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">课程更新</h3>
-                        <ul class="course-list">
-                            <li><a href="#">课程名称1</a></li>
-                            <li><a href="#">课程名称2</a></li>
-                            <li><a href="#">课程名称3</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">大学协会动态</h3>
-                        <ul class="news-list">
-                            <li><a href="#">协会活动新闻标题1</a></li>
-                            <li><a href="#">协会活动新闻标题2</a></li>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="#">大学动态：新校区图书馆正式启用</a></li>
+                            <li><a href="#">推荐大学：长沙市老干部大学</a></li>
+                            <li><a href="#">课程更新：柔力球进阶练习视频</a></li>
                         </ul>
                     </div>
                 </div>
-                
-                <!-- 右侧栏：老龄动态 -->
-                <div class="sidebar right-sidebar">
-                    <div class="card">
-                        <h3 class="card-title">政策解读</h3>
-                        <ul class="news-list">
-                            <li><a href="#">政策解读文章标题1</a></li>
-                            <li><a href="#">政策解读文章标题2</a></li>
+                <!-- 卡片 3：政策解读 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span><i class="fa fa-balance-scale"></i> 政策解读</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="#">政策解读：2024居家养老贴息新政</a></li>
+                            <li><a href="#">健康科普：春季老年人防流感指南</a></li>
+                            <li><a href="#">文化资讯：社区银龄合唱团巡演</a></li>
                         </ul>
                     </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">健康科普</h3>
-                        <ul class="news-list">
-                            <li><a href="#">健康科普文章标题1</a></li>
-                            <li><a href="#">健康科普文章标题2</a></li>
-                        </ul>
+                </div>
+            </div>
+
+            <div class="section-title-wrap courses-head" style="margin-top: 40px;">
+                <h3 class="section-title">热门课程</h3>
+                <a href="#" class="more-link">查看更多课程 <i class="fa fa-angle-right"></i></a>
+            </div>
+            <div class="course-grid">
+                <!-- 课程卡片 -->
+                <div class="course-card">
+                    <div class="course-img" style="background-image: url('/portal/img/course1.jpg');"></div>
+                    <div class="course-info">
+                        <h4>水墨画零基础入门</h4>
+                        <p class="course-meta"><span>主讲：清风老师</span><span>1500人已学</span></p>
                     </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">文化资讯</h3>
-                        <ul class="news-list">
-                            <li><a href="#">文化资讯文章标题1</a></li>
-                            <li><a href="#">文化资讯文章标题2</a></li>
-                        </ul>
+                </div>
+                <div class="course-card">
+                    <div class="course-img" style="background-image: url('/portal/img/course2.jpg');"></div>
+                    <div class="course-info">
+                        <h4>太极拳二十四式教学</h4>
+                        <p class="course-meta"><span>主讲：王大师</span><span>2800人已学</span></p>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-img" style="background-image: url('/portal/img/course3.jpg');"></div>
+                    <div class="course-info">
+                        <h4>老年社交舞精选</h4>
+                        <p class="course-meta"><span>主讲：李老师</span><span>1200人已学</span></p>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-img" style="background-image: url('/portal/img/course4.jpg');"></div>
+                    <div class="course-info">
+                        <h4>手机短视频剪辑指南</h4>
+                        <p class="course-meta"><span>主讲：小陈老师</span><span>3500人已学</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-aggregation-grid info-panels" style="margin-top: 40px;">
+                <!-- 活动预告 -->
+                <div class="aggregation-box event-panel">
+                    <div class="section-title-wrap">
+                        <h3 class="section-title small">活动预告</h3>
+                    </div>
+                    <div class="event-list">
+                        <div class="event-item">
+                            <div class="event-date"><span>11</span>12月</div>
+                            <div class="event-desc">
+                                <h5>线上：银龄养生专家讲座</h5>
+                                <p>主讲人：省中医医院院长 腾讯会议号：123-456</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date blue"><span>15</span>12月</div>
+                            <div class="event-desc">
+                                <h5>线下：全省书法临摹大赛</h5>
+                                <p>地点：省老年服务中心 3楼大礼堂</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 人气文章 -->
+                <div class="aggregation-box article-panel">
+                    <div class="section-title-wrap">
+                        <h3 class="section-title small">人气文章</h3>
+                    </div>
+                    <div class="popular-posts">
+                        <a href="#" class="post-item">
+                            <span class="rank rank-1">1</span>
+                            <span class="post-title">为何现在的退休生活比以往更精彩？</span>
+                            <span class="view-count">1.2w阅读</span>
+                        </a>
+                        <a href="#" class="post-item">
+                            <span class="rank rank-2">2</span>
+                            <span class="post-title">2024年度老年福利政策汇总（独家）</span>
+                            <span class="view-count">8.5k阅读</span>
+                        </a>
+                        <a href="#" class="post-item">
+                            <span class="rank rank-3">3</span>
+                            <span class="post-title">这5个坏习惯，正在悄悄偷走老人的健康</span>
+                            <span class="view-count">7.2k阅读</span>
+                        </a>
+                        <a href="#" class="post-item">
+                            <span class="rank">4</span>
+                            <span class="post-title">如何在家也能参加“云端”老年大学？</span>
+                            <span class="view-count">5.1k阅读</span>
+                        </a>
+                        <a href="#" class="post-item">
+                            <span class="rank">5</span>
+                            <span class="post-title">湘水情长：镜头里的湖南美景</span>
+                            <span class="view-count">4.8k阅读</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -220,40 +275,87 @@
     <!-- 底部功能区 -->
     <section class="bottom-features">
         <div class="container">
+            <div class="section-title-wrap">
+                <h3 class="section-title">便民服务</h3>
+            </div>
             <div class="features-grid">
                 <!-- 在线课程精选 -->
                 <div class="feature-item">
-                    <h3 class="card-title">在线课程精选</h3>
+                    <div class="feature-head">
+                        <h3 class="card-title">在线课程精选</h3>
+                        <a href="/portal/course" class="feature-more">查看全部</a>
+                    </div>
                     <div class="course-cards">
-                        <div class="course-card">
-                            <a href="#">课程名称1</a>
-                        </div>
-                        <div class="course-card">
-                            <a href="#">课程名称2</a>
-                        </div>
-                        <div class="course-card">
-                            <a href="#">课程名称3</a>
-                        </div>
+                        <a href="/portal/course" class="mini-course-card">
+                            <span class="mini-course-name">国画花鸟临摹进阶</span>
+                            <span class="mini-course-meta">主讲：周老师 · 2100人已学</span>
+                        </a>
+                        <a href="/portal/course" class="mini-course-card">
+                            <span class="mini-course-name">老年手机摄影实战课</span>
+                            <span class="mini-course-meta">主讲：陈老师 · 1800人已学</span>
+                        </a>
+                        <a href="/portal/course" class="mini-course-card">
+                            <span class="mini-course-name">八段锦居家养生训练</span>
+                            <span class="mini-course-meta">主讲：刘老师 · 2600人已学</span>
+                        </a>
+                        <a href="/portal/course" class="mini-course-card">
+                            <span class="mini-course-name">短视频剪辑快速入门</span>
+                            <span class="mini-course-meta">主讲：小陈老师 · 3500人已学</span>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- 会员特权展示 -->
                 <div class="feature-item">
-                    <h3 class="card-title">会员特权展示</h3>
+                    <div class="feature-head">
+                        <h3 class="card-title">会员特权展示</h3>
+                        <a href="/portal/member" class="feature-more">立即开通</a>
+                    </div>
                     <div class="privilege-list">
-                        <div class="privilege-item">阅读</div>
-                        <div class="privilege-item">下载</div>
-                        <div class="privilege-item">投稿</div>
-                        <div class="privilege-item">购物</div>
+                        <div class="privilege-item">
+                            <span class="privilege-name">阅读</span>
+                            <span class="privilege-desc">全文内容无限浏览</span>
+                        </div>
+                        <div class="privilege-item">
+                            <span class="privilege-name">下载</span>
+                            <span class="privilege-desc">资料与模板高速下载</span>
+                        </div>
+                        <div class="privilege-item">
+                            <span class="privilege-name">投稿</span>
+                            <span class="privilege-desc">作品投稿与进度追踪</span>
+                        </div>
+                        <div class="privilege-item">
+                            <span class="privilege-name">购物</span>
+                            <span class="privilege-desc">会员专区专属优惠</span>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 下载专区 -->
                 <div class="feature-item">
-                    <h3 class="card-title">下载专区</h3>
+                    <div class="feature-head">
+                        <h3 class="card-title">下载专区</h3>
+                        <a href="/portal/download" class="feature-more">更多文件</a>
+                    </div>
                     <ul class="download-list">
-                        <li><a href="#">常用表格</a></li>
-                        <li><a href="#">政策文件</a></li>
+                        <li>
+                            <a href="/portal/download">
+                                <span class="download-title">常用表格：活动报名表（2026版）</span>
+                                <span class="download-meta">DOCX · 52KB</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/portal/download">
+                                <span class="download-title">政策文件：老年教育支持政策汇编</span>
+                                <span class="download-meta">PDF · 2.1MB</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/portal/download">
+                                <span class="download-title">常用表格：会员信息变更申请单</span>
+                                <span class="download-meta">XLSX · 86KB</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

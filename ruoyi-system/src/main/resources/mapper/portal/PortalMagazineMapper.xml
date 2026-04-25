@@ -8,9 +8,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="magazineTitle" column="magazine_title"/>
         <result property="magazineCover" column="magazine_cover"/>
         <result property="magazineIssue" column="magazine_issue"/>
+        <result property="publishYear" column="publish_year"/>
         <result property="publishDate" column="publish_date"/>
         <result property="magazineContent" column="magazine_content"/>
         <result property="magazinePdf" column="magazine_pdf"/>
+        <result property="h5Url" column="h5_url"/>
+        <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -20,7 +23,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPortalMagazineVo">
-        select magazine_id, magazine_title, magazine_cover, magazine_issue, publish_date, magazine_content, magazine_pdf, status, create_by, create_time, update_by, update_time, remark from portal_magazine
+        select magazine_id, magazine_title, magazine_cover, magazine_issue, publish_year, publish_date,
+               magazine_content, magazine_pdf, h5_url, introduction, status, create_by, create_time,
+               update_by, update_time, remark
+        from portal_magazine
     </sql>
 
     <select id="selectPortalMagazineById" parameterType="Long" resultMap="PortalMagazineResult">
@@ -37,6 +43,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="magazineIssue != null and magazineIssue != ''">
                 and magazine_issue like concat('%', #{magazineIssue}, '%')
             </if>
+            <if test="publishYear != null">
+                and publish_year = #{publishYear}
+            </if>
             <if test="publishDate != null">
                 and publish_date = #{publishDate}
             </if>
@@ -52,9 +61,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="magazineTitle != null">magazine_title,</if>
             <if test="magazineCover != null">magazine_cover,</if>
             <if test="magazineIssue != null">magazine_issue,</if>
+            <if test="publishYear != null">publish_year,</if>
             <if test="publishDate != null">publish_date,</if>
             <if test="magazineContent != null">magazine_content,</if>
             <if test="magazinePdf != null">magazine_pdf,</if>
+            <if test="h5Url != null">h5_url,</if>
+            <if test="introduction != null">introduction,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -66,9 +78,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="magazineTitle != null">#{magazineTitle},</if>
             <if test="magazineCover != null">#{magazineCover},</if>
             <if test="magazineIssue != null">#{magazineIssue},</if>
+            <if test="publishYear != null">#{publishYear},</if>
             <if test="publishDate != null">#{publishDate},</if>
             <if test="magazineContent != null">#{magazineContent},</if>
             <if test="magazinePdf != null">#{magazinePdf},</if>
+            <if test="h5Url != null">#{h5Url},</if>
+            <if test="introduction != null">#{introduction},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -84,9 +99,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="magazineTitle != null">magazine_title = #{magazineTitle},</if>
             <if test="magazineCover != null">magazine_cover = #{magazineCover},</if>
             <if test="magazineIssue != null">magazine_issue = #{magazineIssue},</if>
+            <if test="publishYear != null">publish_year = #{publishYear},</if>
             <if test="publishDate != null">publish_date = #{publishDate},</if>
             <if test="magazineContent != null">magazine_content = #{magazineContent},</if>
             <if test="magazinePdf != null">magazine_pdf = #{magazinePdf},</if>
+            <if test="h5Url != null">h5_url = #{h5Url},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>

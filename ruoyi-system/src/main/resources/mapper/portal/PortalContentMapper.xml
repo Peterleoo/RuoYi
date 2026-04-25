@@ -5,13 +5,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.portal.mapper.PortalContentMapper">
     <resultMap type="com.ruoyi.portal.domain.PortalContent" id="PortalContentResult">
         <id     property="contentId"    column="content_id"    />
+        <result property="categoryId"   column="category_id"   />
+        <result property="schoolId"     column="school_id"     />
         <result property="title"        column="title"        />
+        <result property="subTitle"     column="sub_title"    />
         <result property="content"      column="content"      />
         <result property="summary"      column="summary"      />
         <result property="coverImage"   column="cover_image"  />
         <result property="category"     column="category"     />
         <result property="author"       column="author"       />
+        <result property="source"       column="source"       />
         <result property="viewCount"    column="view_count"   />
+        <result property="auditStatus"  column="audit_status" />
+        <result property="publishTime"  column="publish_time" />
         <result property="status"       column="status"       />
         <result property="createBy"     column="create_by"    />
         <result property="createTime"   column="create_time"  />
@@ -22,44 +28,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mediaUrl"     column="media_url"    />
         <result property="mediaDuration" column="media_duration" />
         <result property="mediaSize"    column="media_size"   />
+        <result property="schoolName"   column="school_name"  />
     </resultMap>
 
     <sql id="selectPortalContentVo">
-        select content_id, title, content, summary, cover_image, category, author, view_count, status, create_by, create_time, update_by, update_time, remark, media_type, media_url, media_duration, media_size
-        from portal_content
+        select c.content_id, c.category_id, c.school_id, c.title, c.sub_title, c.content, c.summary,
+               c.cover_image, c.category, c.author, c.source, c.view_count, c.audit_status, c.publish_time,
+               c.status, c.create_by, c.create_time, c.update_by, c.update_time, c.remark,
+               c.media_type, c.media_url, c.media_duration, c.media_size,
+               s.school_name
+        from portal_content c
+        left join portal_school s on c.school_id = s.school_id
     </sql>
 
     <select id="selectPortalContentList" parameterType="com.ruoyi.portal.domain.PortalContent" resultMap="PortalContentResult">
         <include refid="selectPortalContentVo" />
         <where>
             <if test="title != null and title != ''">
-                AND title like concat('%', #{title}, '%')
+                AND c.title like concat('%', #{title}, '%')
             </if>
             <if test="category != null and category != ''">
-                AND category = #{category}
+                AND c.category = #{category}
+            </if>
+            <if test="categoryId != null">
+                AND c.category_id = #{categoryId}
+            </if>
+            <if test="schoolId != null">
+                AND c.school_id = #{schoolId}
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                AND c.audit_status = #{auditStatus}
             </if>
             <if test="status != null and status != ''">
-                AND status = #{status}
+                AND c.status = #{status}
             </if>
         </where>
-        order by create_time desc
+        order by c.create_time desc
     </select>
 
     <select id="selectPortalContentById" parameterType="Long" resultMap="PortalContentResult">
         <include refid="selectPortalContentVo" />
-        where content_id = #{contentId}
+        where c.content_id = #{contentId}
     </select>
 
     <insert id="insertPortalContent" parameterType="com.ruoyi.portal.domain.PortalContent" useGeneratedKeys="true" keyProperty="contentId">
         insert into portal_content
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="schoolId != null">school_id,</if>
             <if test="title != null">title,</if>
+            <if test="subTitle != null">sub_title,</if>
             <if test="content != null">content,</if>
             <if test="summary != null">summary,</if>
             <if test="coverImage != null">cover_image,</if>
             <if test="category != null">category,</if>
             <if test="author != null">author,</if>
+            <if test="source != null">source,</if>
             <if test="viewCount != null">view_count,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="publishTime != null">publish_time,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -72,13 +99,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mediaSize != null">media_size,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="schoolId != null">#{schoolId},</if>
             <if test="title != null">#{title},</if>
+            <if test="subTitle != null">#{subTitle},</if>
             <if test="content != null">#{content},</if>
             <if test="summary != null">#{summary},</if>
             <if test="coverImage != null">#{coverImage},</if>
             <if test="category != null">#{category},</if>
             <if test="author != null">#{author},</if>
+            <if test="source != null">#{source},</if>
             <if test="viewCount != null">#{viewCount},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="publishTime != null">#{publishTime},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -95,13 +128,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePortalContent" parameterType="com.ruoyi.portal.domain.PortalContent">
         update portal_content
         <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="schoolId != null">school_id = #{schoolId},</if>
             <if test="title != null">title = #{title},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
             <if test="content != null">content = #{content},</if>
             <if test="summary != null">summary = #{summary},</if>
             <if test="coverImage != null">cover_image = #{coverImage},</if>
             <if test="category != null">category = #{category},</if>
             <if test="author != null">author = #{author},</if>
+            <if test="source != null">source = #{source},</if>
             <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>

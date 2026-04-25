@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>会员登录 - 门户系统</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .signinpanel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+        .signinpanel h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .btn-portal {
+            background: #667eea;
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .btn-portal:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="signinpanel animated fadeIn">
+        <form id="signupForm">
+            <h2>会员登录</h2>
+            <p class="m-t-md" style="text-align: center; color: #666;">欢迎回来，请登录您的会员账号</p>
+            <div class="form-group">
+                <input type="text" name="username" class="form-control uname" placeholder="账号" required />
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control pword" placeholder="密码" required />
+            </div>
+            <button class="btn btn-block btn-portal" id="btnSubmit" data-loading="正在验证登录，请稍后...">登 录</button>
+            <div class="m-t-md" style="text-align: center;">
+                还没有账号？ <a th:href="@{/portal/register}" style="color: #667eea; font-weight: bold;">立即注册</a>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        $(function() {
+            $("#btnSubmit").click(function(e) {
+                e.preventDefault();
+                var username = $("input[name='username']").val();
+                var password = $("input[name='password']").val();
+                
+                if ($.common.isEmpty(username) || $.common.isEmpty(password)) {
+                    $.modal.msgError("请输入账号和密码");
+                    return;
+                }
+
+                $.modal.loading($("#btnSubmit").data("loading"));
+                $.ajax({
+                    type: "POST",
+                    url: ctx + "portal/login",
+                    data: {
+                        "loginName": username,
+                        "password": password
+                    },
+                    success: function(r) {
+                        if (r.code == 0) {
+                            location.href = ctx + "portal/member";
+                        } else {
+                            $.modal.msgError(r.msg);
+                            $.modal.closeLoading();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

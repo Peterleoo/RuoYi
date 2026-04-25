@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>会员注册 - 门户系统</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .signinpanel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 450px;
+        }
+        .signinpanel h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .btn-portal {
+            background: #28a745;
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .btn-portal:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="signinpanel animated fadeIn">
+        <form id="registerForm">
+            <h2>加入会员</h2>
+            <p class="m-t-md" style="text-align: center; color: #666;">立即开启您的尊享体验</p>
+            <div class="form-group">
+                <label>登录账号</label>
+                <input type="text" name="loginName" class="form-control" placeholder="建议使用手机号" required />
+            </div>
+            <div class="form-group">
+                <label>您的姓名</label>
+                <input type="text" name="memberName" class="form-control" placeholder="真实姓名" required />
+            </div>
+            <div class="form-group">
+                <label>联系电话</label>
+                <input type="text" name="phone" class="form-control" placeholder="推荐使用常用号码" required />
+            </div>
+            <div class="form-group">
+                <label>设置密码</label>
+                <input type="password" name="password" class="form-control" placeholder="6-20位字符" required />
+            </div>
+            <button class="btn btn-block btn-portal" id="btnSubmit">立即注册</button>
+            <div class="m-t-md" style="text-align: center;">
+                已有账号？ <a th:href="@{/portal/login}" style="color: #28a745; font-weight: bold;">返回登录</a>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        $(function() {
+            $("#btnSubmit").click(function(e) {
+                e.preventDefault();
+                $.modal.loading("正在注册...");
+                $.ajax({
+                    type: "POST",
+                    url: ctx + "portal/register",
+                    data: $('#registerForm').serialize(),
+                    success: function(r) {
+                        if (r.code == 0) {
+                            $.modal.msgSuccess("注册成功，正在跳转登录...");
+                            setTimeout(function() {
+                                location.href = ctx + "portal/login";
+                            }, 1500);
+                        } else {
+                            $.modal.msgError(r.msg);
+                            $.modal.closeLoading();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -45,7 +45,7 @@ public class SysIndexController extends BaseController
     private SysPasswordService passwordService;
 
     // 系统首页
-    @GetMapping("/admin/index")
+    @GetMapping({ "/admin/index", "/index" })
     public String index(ModelMap mmap, HttpServletRequest request)
     {
         // 取身份信息
@@ -89,7 +89,7 @@ public class SysIndexController extends BaseController
     }
 
     // 锁定屏幕
-    @GetMapping("/admin/lockscreen")
+    @GetMapping({ "/admin/lockscreen", "/lockscreen" })
     public String lockscreen(ModelMap mmap)
     {
         mmap.put("user", getSysUser());
@@ -98,7 +98,7 @@ public class SysIndexController extends BaseController
     }
 
     // 解锁屏幕
-    @PostMapping("/admin/unlockscreen")
+    @PostMapping({ "/admin/unlockscreen", "/unlockscreen" })
     @ResponseBody
     public AjaxResult unlockscreen(String password)
     {
@@ -116,21 +116,21 @@ public class SysIndexController extends BaseController
     }
 
     // 切换主题
-    @GetMapping("/admin/system/switchSkin")
+    @GetMapping({ "/admin/system/switchSkin", "/system/switchSkin" })
     public String switchSkin()
     {
         return "skin";
     }
 
     // 切换菜单
-    @GetMapping("/admin/system/menuStyle/{style}")
+    @GetMapping({ "/admin/system/menuStyle/{style}", "/system/menuStyle/{style}" })
     public void menuStyle(@PathVariable String style, HttpServletResponse response)
     {
         CookieUtils.setCookie(response, "nav-style", style);
     }
 
     // 系统介绍
-    @GetMapping("/admin/system/main")
+    @GetMapping({ "/admin/system/main", "/system/main" })
     public String main(ModelMap mmap)
     {
         mmap.put("version", RuoYiConfig.getVersion());

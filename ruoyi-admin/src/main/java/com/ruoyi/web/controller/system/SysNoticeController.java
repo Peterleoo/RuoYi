@@ -28,7 +28,7 @@ import com.ruoyi.system.service.ISysNoticeService;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/admin/system/notice")
+@RequestMapping({ "/admin/system/notice", "/system/notice" })
 public class SysNoticeController extends BaseController
 {
     private String prefix = "system/notice";

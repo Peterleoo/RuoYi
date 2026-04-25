@@ -26,13 +26,13 @@ public class SysRegisterController extends BaseController
     @Autowired
     private ISysConfigService configService;
 
-    @GetMapping("/admin/register")
+    @GetMapping({ "/admin/register", "/register" })
     public String register()
     {
         return "register";
     }
 
-    @PostMapping("/admin/register")
+    @PostMapping({ "/admin/register", "/register" })
     @ResponseBody
     public AjaxResult ajaxRegister(SysUser user)
     {

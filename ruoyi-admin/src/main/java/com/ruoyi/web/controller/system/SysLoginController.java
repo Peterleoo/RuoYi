@@ -34,10 +34,22 @@ public class SysLoginController extends BaseController
     @Value("${shiro.rememberMe.enabled: false}")
     private boolean rememberMe;
 
+    /**
+     * 是否开启验证码
+     */
+    @Value("${shiro.user.captchaEnabled}")
+    private boolean captchaEnabled;
+
+    /**
+     * 验证码类型
+     */
+    @Value("${shiro.user.captchaType}")
+    private String captchaType;
+
     @Autowired
     private ConfigService configService;
 
-    @GetMapping("/admin/login")
+    @GetMapping({ "/admin/login", "/login" })
     public String login(HttpServletRequest request, HttpServletResponse response, ModelMap mmap)
     {
         // 如果是Ajax请求，返回Json字符串。
@@ -47,12 +59,16 @@ public class SysLoginController extends BaseController
         }
         // 是否开启记住我
         mmap.put("isRemembered", rememberMe);
+        // 是否开启验证码
+        mmap.put("captchaEnabled", captchaEnabled);
+        // 验证码类型
+        mmap.put("captchaType", captchaType);
         // 是否开启用户注册
         mmap.put("isAllowRegister", Convert.toBool(configService.getKey("sys.account.registerUser"), false));
         return "login";
     }
 
-    @PostMapping("/admin/login")
+    @PostMapping({ "/admin/login", "/login" })
     @ResponseBody
     public AjaxResult ajaxLogin(String username, String password, Boolean rememberMe)
     {

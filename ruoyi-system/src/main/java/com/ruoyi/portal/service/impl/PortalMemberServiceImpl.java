@@ -3,9 +3,12 @@ package com.ruoyi.portal.service.impl;
 import com.ruoyi.portal.domain.PortalMember;
 import com.ruoyi.portal.mapper.PortalMemberMapper;
 import com.ruoyi.portal.service.IPortalMemberService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Date;
 
 /**
  * 会员管理Service实现类
@@ -25,6 +28,53 @@ public class PortalMemberServiceImpl implements IPortalMemberService {
     @Override
     public PortalMember selectPortalMemberById(Long memberId) {
         return portalMemberMapper.selectPortalMemberById(memberId);
+    }
+
+    @Override
+    public PortalMember selectPortalMemberByLoginName(String loginName) {
+        return portalMemberMapper.selectPortalMemberByLoginName(loginName);
+    }
+
+    /**
+     * 注册会员
+     */
+    @Override
+    public int registerMember(PortalMember member) {
+        // 生成盐，限制在数据库字段长度范围内（默认3个字节即6个十六进制字符）
+        String salt = new SecureRandomNumberGenerator().nextBytes(3).toHex();
+        member.setSalt(salt);
+        // 加密密码
+        member.setPassword(encryptPassword(member.getLoginName(), member.getPassword(), salt));
+        member.setCreateTime(new Date());
+        member.setStatus("0"); // 默认正常
+        member.setMemberType("0"); // 默认普通会员
+        return portalMemberMapper.insertPortalMember(member);
+    }
+
+    /**
+     * 登录校验
+     */
+    @Override
+    public PortalMember login(String loginName, String password) {
+        PortalMember member = portalMemberMapper.selectPortalMemberByLoginName(loginName);
+        if (member == null) {
+            return null;
+        }
+        if ("1".equals(member.getStatus())) {
+            throw new RuntimeException("账号已被停用");
+        }
+        String entryPwd = encryptPassword(loginName, password, member.getSalt());
+        if (member.getPassword().equals(entryPwd)) {
+            return member;
+        }
+        return null;
+    }
+
+    /**
+     * 加密方法
+     */
+    public String encryptPassword(String loginName, String password, String salt) {
+        return DigestUtils.md5Hex(loginName + password + salt);
     }
 
     /**

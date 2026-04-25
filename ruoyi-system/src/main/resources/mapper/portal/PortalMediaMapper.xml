@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMediaMapper">
+
+    <resultMap id="PortalMediaResult" type="com.ruoyi.portal.domain.PortalMedia">
+        <id property="mediaId" column="media_id"/>
+        <result property="title" column="title"/>
+        <result property="mediaType" column="media_type"/>
+        <result property="coverImage" column="cover_image"/>
+        <result property="mediaUrl" column="media_url"/>
+        <result property="duration" column="duration"/>
+        <result property="articleId" column="article_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="articleTitle" column="article_title"/>
+        <result property="courseName" column="course_name"/>
+    </resultMap>
+
+    <sql id="selectPortalMediaVo">
+        select m.media_id, m.title, m.media_type, m.cover_image, m.media_url, m.duration,
+               m.article_id, m.course_id, m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.remark,
+               a.title as article_title, c.course_name
+        from portal_media m
+        left join portal_content a on m.article_id = a.content_id
+        left join portal_course c on m.course_id = c.course_id
+    </sql>
+
+    <select id="selectPortalMediaById" parameterType="Long" resultMap="PortalMediaResult">
+        <include refid="selectPortalMediaVo"/>
+        where m.media_id = #{mediaId}
+    </select>
+
+    <select id="selectPortalMediaList" parameterType="com.ruoyi.portal.domain.PortalMedia" resultMap="PortalMediaResult">
+        <include refid="selectPortalMediaVo"/>
+        <where>
+            <if test="title != null and title != ''">
+                and m.title like concat('%', #{title}, '%')
+            </if>
+            <if test="mediaType != null and mediaType != ''">
+                and m.media_type = #{mediaType}
+            </if>
+            <if test="status != null and status != ''">
+                and m.status = #{status}
+            </if>
+        </where>
+        order by m.media_id desc
+    </select>
+
+    <insert id="insertPortalMedia" parameterType="com.ruoyi.portal.domain.PortalMedia" useGeneratedKeys="true" keyProperty="mediaId">
+        insert into portal_media
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="mediaType != null">media_type,</if>
+            <if test="coverImage != null">cover_image,</if>
+            <if test="mediaUrl != null">media_url,</if>
+            <if test="duration != null">duration,</if>
+            <if test="articleId != null">article_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="mediaType != null">#{mediaType},</if>
+            <if test="coverImage != null">#{coverImage},</if>
+            <if test="mediaUrl != null">#{mediaUrl},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="articleId != null">#{articleId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMedia" parameterType="com.ruoyi.portal.domain.PortalMedia">
+        update portal_media
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="mediaType != null">media_type = #{mediaType},</if>
+            <if test="coverImage != null">cover_image = #{coverImage},</if>
+            <if test="mediaUrl != null">media_url = #{mediaUrl},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="articleId != null">article_id = #{articleId},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where media_id = #{mediaId}
+    </update>
+
+    <delete id="deletePortalMediaById" parameterType="Long">
+        delete from portal_media where media_id = #{mediaId}
+    </delete>
+
+    <delete id="deletePortalMediaByIds" parameterType="Long[]">
+        delete from portal_media where media_id in
+        <foreach item="mediaId" collection="array" open="(" separator="," close=")">
+            #{mediaId}
+        </foreach>
+    </delete>
+</mapper>

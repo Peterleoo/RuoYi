@@ -2,6 +2,7 @@ package com.ruoyi.portal.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,7 +25,11 @@ public class PortalMagazine implements Serializable {
     /** 期号 */
     private String magazineIssue;
 
+    /** 年份 */
+    private Integer publishYear;
+
     /** 出版日期 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date publishDate;
 
     /** 杂志内容 */
@@ -32,6 +37,12 @@ public class PortalMagazine implements Serializable {
 
     /** PDF链接 */
     private String magazinePdf;
+
+    /** H5阅读链接 */
+    private String h5Url;
+
+    /** 简介 */
+    private String introduction;
 
     /** 状态（0正常 1停用） */
     private String status;
@@ -83,6 +94,14 @@ public class PortalMagazine implements Serializable {
         return magazineIssue;
     }
 
+    public Integer getPublishYear() {
+        return publishYear;
+    }
+
+    public void setPublishYear(Integer publishYear) {
+        this.publishYear = publishYear;
+    }
+
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
@@ -105,6 +124,22 @@ public class PortalMagazine implements Serializable {
 
     public String getMagazinePdf() {
         return magazinePdf;
+    }
+
+    public String getH5Url() {
+        return h5Url;
+    }
+
+    public void setH5Url(String h5Url) {
+        this.h5Url = h5Url;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public void setStatus(String status) {
@@ -162,9 +197,12 @@ public class PortalMagazine implements Serializable {
                 .append("magazineTitle", getMagazineTitle())
                 .append("magazineCover", getMagazineCover())
                 .append("magazineIssue", getMagazineIssue())
+                .append("publishYear", getPublishYear())
                 .append("publishDate", getPublishDate())
                 .append("magazineContent", getMagazineContent())
                 .append("magazinePdf", getMagazinePdf())
+                .append("h5Url", getH5Url())
+                .append("introduction", getIntroduction())
                 .append("status", getStatus())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())

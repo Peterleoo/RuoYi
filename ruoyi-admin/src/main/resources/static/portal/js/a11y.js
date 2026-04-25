@@ -238,19 +238,22 @@
                 
                 /* Toggle Button */
                 #a11y-toggle-btn {
-                    width: 56px;
-                    height: 56px;
-                    border-radius: 50%;
+                    padding: 0 20px;
+                    height: 50px;
+                    border-radius: 25px;
                     background: #2563eb;
                     color: white;
                     border: none;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    gap: 10px;
                     transition: all 0.3s ease;
-                    font-size: 24px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    white-space: nowrap;
                 }
                 
                 #a11y-toggle-btn:hover {
@@ -814,7 +817,10 @@
       const toggleBtn = document.createElement("button");
       toggleBtn.id = "a11y-toggle-btn";
       toggleBtn.setAttribute("aria-label", this.translations.title);
-      toggleBtn.innerHTML = '<i class="fas fa-universal-access"></i>';
+      toggleBtn.innerHTML = `
+        <i class="fas fa-universal-access" style="font-size: 20px;"></i>
+        <span>${this.translations.title}</span>
+      `;
 
       // Create the settings panel
       const panel = document.createElement("div");

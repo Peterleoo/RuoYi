@@ -15,6 +15,9 @@ public class PortalMember implements Serializable {
     /** 会员ID */
     private Long memberId;
 
+    /** 登录账号 */
+    private String loginName;
+
     /** 会员姓名 */
     private String memberName;
 
@@ -26,6 +29,12 @@ public class PortalMember implements Serializable {
 
     /** 邮箱 */
     private String email;
+
+    /** 登录密码 */
+    private String password;
+
+    /** 加密盐 */
+    private String salt;
 
     /** 地址 */
     private String address;
@@ -62,6 +71,14 @@ public class PortalMember implements Serializable {
         return memberId;
     }
 
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
@@ -92,6 +109,22 @@ public class PortalMember implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getSalt() {
+        return salt;
     }
 
     public void setAddress(String address) {
@@ -170,10 +203,13 @@ public class PortalMember implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("memberId", getMemberId())
+                .append("loginName", getLoginName())
                 .append("memberName", getMemberName())
                 .append("memberType", getMemberType())
                 .append("phone", getPhone())
                 .append("email", getEmail())
+                .append("password", getPassword())
+                .append("salt", getSalt())
                 .append("address", getAddress())
                 .append("joinDate", getJoinDate())
                 .append("expireDate", getExpireDate())

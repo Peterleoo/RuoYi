@@ -1,235 +1,248 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header" />
+    <th:block th:include="include :: header('新增内容')" />
     <th:block th:include="include :: summernote-css" />
-    <th:block th:include="include :: summernote-js" />
+    <style>
+        .note-modal {
+            z-index: 1051 !important;
+        }
+        .note-modal-backdrop {
+            z-index: 1050 !important;
+        }
+    </style>
 </head>
-<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>新增内容</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-content-add">
+            <input type="hidden" id="contentHtmlInput" name="content">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分类：</label>
+                <div class="col-sm-8">
+                    <input name="category" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分类ID：</label>
+                <div class="col-sm-8">
+                    <input name="categoryId" class="form-control" type="number">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所属学校：</label>
+                <div class="col-sm-8">
+                    <select name="schoolId" class="form-control">
+                        <option value="">请选择学校</option>
+                        <option th:each="school : ${schools}" th:value="${school.schoolId}" th:text="${school.schoolName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">副标题：</label>
+                <div class="col-sm-8">
+                    <input name="subTitle" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">封面图：</label>
+                <div class="col-sm-8">
+                    <input name="coverImage" class="form-control" type="text" placeholder="图片URL">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">来源：</label>
+                <div class="col-sm-8">
+                    <input name="source" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">作者：</label>
+                <div class="col-sm-8">
+                    <input name="author" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">摘要：</label>
+                <div class="col-sm-8">
+                    <textarea name="summary" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">内容详情：</label>
+                <div class="col-sm-8">
+                    <div class="summernote" id="contentEditor"></div>
+                    <div style="margin-top: 10px;">
+                        <div class="input-group">
+                            <span class="input-group-addon">媒体类型</span>
+                            <select class="form-control" id="mediaType">
+                                <option value="video">视频</option>
+                                <option value="audio">音频</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                            <span class="input-group-addon">媒体URL</span>
+                            <input id="mediaUrl" class="form-control" type="text" placeholder="可粘贴媒体地址或先上传文件">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="insertMediaByUrl()">插入正文</button>
+                            </span>
                         </div>
-                    </div>
-                    <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="form-content-add">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">标题：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="title" id="title" placeholder="请输入标题" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">分类：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="category" id="category" placeholder="请输入分类" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">作者：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="author" id="author" placeholder="请输入作者" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">摘要：</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="summary" id="summary" rows="3" placeholder="请输入摘要"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">封面图片：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="coverImage" id="coverImage" placeholder="请输入封面图片URL">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">媒体类型：</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="mediaType" id="mediaType">
-                                        <option value="text">文本</option>
-                                        <option value="video">视频</option>
-                                        <option value="audio">音频</option>
-                                        <option value="pdf">PDF</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">媒体文件：</label>
-                                <div class="col-sm-10">
-                                    <input type="file" class="form-control" id="mediaFile" placeholder="请选择媒体文件">
-                                    <input type="hidden" name="mediaUrl" id="mediaUrl">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">媒体时长：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="mediaDuration" id="mediaDuration" placeholder="请输入媒体时长（如：00:05:30）">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">媒体大小：</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="mediaSize" id="mediaSize" placeholder="请输入媒体文件大小（如：10MB）">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">内容：</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="content" id="content" rows="10" required></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">状态：</label>
-                                <div class="col-sm-10">
-                                    <div class="radio radio-info radio-inline">
-                                        <input type="radio" id="status0" name="status" value="0" checked>
-                                        <label for="status0"> 正常 </label>
-                                    </div>
-                                    <div class="radio radio-inline">
-                                        <input type="radio" id="status1" name="status" value="1">
-                                        <label for="status1"> 停用 </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">备注：</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="remark" id="remark" rows="3" placeholder="请输入备注"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-primary" type="submit">保存</button>
-                                    <button class="btn btn-white" type="button" onclick="closeModal()">取消</button>
-                                </div>
-                            </div>
-                        </form>
+                        <div class="input-group" style="margin-top: 8px;">
+                            <span class="input-group-addon">上传媒体</span>
+                            <input id="mediaFile" class="form-control" type="file" accept="video/*,audio/*,.pdf">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" onclick="uploadMediaFile()">上传并回填URL</button>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">审核状态：</label>
+                <div class="col-sm-8">
+                    <select name="auditStatus" class="form-control">
+                        <option value="0">待审</option>
+                        <option value="1">通过</option>
+                        <option value="2">驳回</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">发布时间：</label>
+                <div class="col-sm-8">
+                    <input name="publishTime" class="form-control" type="datetime-local">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" id="status0" name="status" value="0" checked>
+                        <label for="status0">正常</label>
+                    </div>
+                    <div class="radio-box">
+                        <input type="radio" id="status1" name="status" value="1">
+                        <label for="status1">停用</label>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <th:block th:include="include :: footer" />
-    <script type="text/javascript">
+    <th:block th:include="include :: summernote-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "admin/portal/content";
+
+        // 修复在 layer 弹层内使用 summernote 时，链接/图片/视频弹窗被遮罩和焦点劫持的问题
+        if ($.fn.modal && $.fn.modal.Constructor) {
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+        }
+
         $(function() {
-            // 初始化富文本编辑器
-            $('#content').summernote({
-                height: 300,
-                placeholder: '请输入内容',
+            $('.summernote').summernote({
+                placeholder: '请输入内容，支持图文混排与媒体链接',
+                height: 280,
                 lang: 'zh-CN',
                 callbacks: {
                     onImageUpload: function(files) {
-                        // 处理图片上传
-                        uploadFile(files[0], 'image');
+                        sendFile(files[0], this, "image");
                     }
-                }
-            });
-
-            // 媒体文件上传
-            $('#mediaFile').change(function() {
-                var file = this.files[0];
-                if (file) {
-                    uploadFile(file, 'media');
-                }
-            });
-
-            // 表单验证
-            $('#form-content-add').validate({
-                rules: {
-                    title: {
-                        required: true,
-                        maxlength: 255
-                    },
-                    category: {
-                        required: true,
-                        maxlength: 50
-                    },
-                    author: {
-                        required: true,
-                        maxlength: 50
-                    },
-                    content: {
-                        required: true
-                    }
-                },
-                messages: {
-                    title: {
-                        required: "请输入标题",
-                        maxlength: "标题不能超过255个字符"
-                    },
-                    category: {
-                        required: "请输入分类",
-                        maxlength: "分类不能超过50个字符"
-                    },
-                    author: {
-                        required: "请输入作者",
-                        maxlength: "作者不能超过50个字符"
-                    },
-                    content: {
-                        required: "请输入内容"
-                    }
-                },
-                submitHandler: function(form) {
-                    $.ajax({
-                        url: "${ctx}/admin/portal/content/add",
-                        type: "post",
-                        data: $(form).serialize(),
-                        success: function(result) {
-                            if (result > 0) {
-                                $.modal.alertSuccess("保存成功");
-                                $.modal.close();
-                                parent.initTable();
-                            } else {
-                                $.modal.alertError("保存失败");
-                            }
-                        }
-                    });
                 }
             });
         });
 
-        function uploadFile(file, type) {
-            var formData = new FormData();
-            formData.append('file', file);
-            formData.append('type', type);
-            
+        function sendFile(file, obj, type) {
+            var data = new FormData();
+            data.append("file", file);
+            data.append("type", type);
             $.ajax({
-                url: "${ctx}/admin/portal/content/upload",
-                type: "post",
-                data: formData,
+                type: "POST",
+                url: ctx + "common/upload",
+                data: data,
+                cache: false,
                 contentType: false,
                 processData: false,
-                success: function(response) {
-                    if (response.code == 0) {
-                        if (type == 'image') {
-                            $('#content').summernote('insertImage', response.data.url);
+                success: function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        if (type === "image") {
+                            $(obj).summernote('editor.insertImage', result.url, result.fileName);
                         } else {
-                            // 处理视频、音频、PDF等文件
-                            $('#mediaUrl').val(response.data.url);
-                            // 自动填充媒体大小
-                            var size = (file.size / (1024 * 1024)).toFixed(2) + 'MB';
-                            $('#mediaSize').val(size);
+                            $("#mediaUrl").val(result.url);
+                            $.modal.msgSuccess("上传成功，请点击“插入正文”");
                         }
                     } else {
-                        $.modal.alertError(response.msg);
+                        $.modal.alertError(result.msg);
                     }
+                },
+                error: function() {
+                    $.modal.alertError("上传失败");
                 }
             });
         }
 
-        function closeModal() {
-            $.modal.close();
+        function uploadMediaFile() {
+            var fileInput = document.getElementById("mediaFile");
+            if (!fileInput.files || fileInput.files.length === 0) {
+                $.modal.msgWarning("请先选择媒体文件");
+                return;
+            }
+            sendFile(fileInput.files[0], null, "media");
+        }
+
+        function insertMediaByUrl() {
+            var url = $.common.trim($("#mediaUrl").val());
+            var type = $("#mediaType").val();
+            if (!url) {
+                $.modal.msgWarning("请先填写或上传媒体URL");
+                return;
+            }
+            var html = "";
+            if (type === "video") {
+                html = '<p><video controls style="max-width:100%;"><source src="' + url + '"></video></p>';
+            } else if (type === "audio") {
+                html = '<p><audio controls style="width:100%;"><source src="' + url + '"></audio></p>';
+            } else {
+                html = '<p><a href="' + url + '" target="_blank">查看PDF文件</a></p>';
+            }
+            $('.summernote').summernote('pasteHTML', html);
+        }
+
+        $("#form-content-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $("#contentHtmlInput").val($('.summernote').summernote('code'));
+                var formData = new FormData(document.getElementById("form-content-add"));
+                $.ajax({
+                    url: prefix + "/add",
+                    type: "post",
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(xhr, settings) {
+                        var csrftoken = $('meta[name=csrf-token]').attr('content');
+                        if ($.common.equalsIgnoreCase(settings.type, "POST")) {
+                            xhr.setRequestHeader("X-CSRF-Token", csrftoken);
+                        }
+                        $.modal.loading("正在处理中，请稍候...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        $.operate.successCallback(result);
+                    },
+                    error: function() {
+                        $.modal.closeLoading();
+                        $.modal.alertError("提交失败，请重试");
+                    }
+                });
+            }
         }
     </script>
 </body>

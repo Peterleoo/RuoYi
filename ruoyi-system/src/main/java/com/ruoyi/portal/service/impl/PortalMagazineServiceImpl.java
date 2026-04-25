@@ -1,5 +1,7 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalMagazine;
 import com.ruoyi.portal.mapper.PortalMagazineMapper;
 import com.ruoyi.portal.service.IPortalMagazineService;
@@ -46,6 +48,8 @@ public class PortalMagazineServiceImpl implements IPortalMagazineService {
      */
     @Override
     public int insertPortalMagazine(PortalMagazine portalMagazine) {
+        portalMagazine.setCreateTime(DateUtils.getNowDate());
+        portalMagazine.setCreateBy(ShiroUtils.getLoginName());
         return portalMagazineMapper.insertPortalMagazine(portalMagazine);
     }
 
@@ -57,6 +61,8 @@ public class PortalMagazineServiceImpl implements IPortalMagazineService {
      */
     @Override
     public int updatePortalMagazine(PortalMagazine portalMagazine) {
+        portalMagazine.setUpdateTime(DateUtils.getNowDate());
+        portalMagazine.setUpdateBy(ShiroUtils.getLoginName());
         return portalMagazineMapper.updatePortalMagazine(portalMagazine);
     }
 
