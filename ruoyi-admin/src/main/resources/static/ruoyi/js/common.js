@@ -233,7 +233,7 @@ var closeItem = function(dataId){
 	    $('.mainContent .RuoYi_iframe[data-id="' + dataId + '"]', topWindow).remove();
 	    return;
 	}
-	var panelUrl = window.frameElement.getAttribute('data-panel');
+	var panelUrl = window.frameElement ? window.frameElement.getAttribute('data-panel') : '';
 	$('.page-tabs-content .active i', topWindow).click();
 	if ($.common.isNotEmpty(panelUrl)) {
 	    $('.menuTab[data-id="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
@@ -248,7 +248,7 @@ var closeItem = function(dataId){
 
 /** 创建选项卡 */
 function createMenuItem(dataUrl, menuName, isRefresh) {
-    var panelUrl = window.frameElement.getAttribute('data-id'),
+    var panelUrl = window.frameElement ? window.frameElement.getAttribute('data-id') : '',
     dataIndex = $.common.random(1, 100),
     flag = true;
     if (dataUrl == undefined || $.trim(dataUrl).length == 0) return false;

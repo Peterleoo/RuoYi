@@ -113,6 +113,9 @@
                         <p>
                             <a class="btn btn-primary" th:if="${magazine.magazinePdf != null and magazine.magazinePdf != ''}" th:href="${magazine.magazinePdf}" target="_blank">阅读PDF</a>
                             <a class="btn btn-primary" style="margin-left:8px;" th:if="${magazine.h5Url != null and magazine.h5Url != ''}" th:href="${magazine.h5Url}" target="_blank">H5阅读</a>
+                            <button class="btn btn-primary magazine-subscribe-btn"
+                                    style="margin-left:8px;"
+                                    th:attr="data-magazine-id=${magazine.magazineId}">订阅杂志</button>
                         </p>
                     </div>
                 </div>
@@ -245,5 +248,67 @@
     <!-- 字体控制脚本 -->
     <script src="/portal/js/font-control.js"></script>
     <script src="/portal/js/a11y.js"></script>
+    <script>
+        (function() {
+            var btns = document.querySelectorAll(".magazine-subscribe-btn");
+            if (!btns.length) {
+                return;
+            }
+
+            function postForm(url, params) {
+                return fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+                    body: new URLSearchParams(params).toString()
+                }).then(function(resp) { return resp.json(); });
+            }
+
+            function refreshStatus() {
+                fetch("/portal/member/subscriptions")
+                    .then(function(resp) { return resp.json(); })
+                    .then(function(res) {
+                        if (res.code !== 0 || !Array.isArray(res.data)) {
+                            return;
+                        }
+                        var subscribed = {};
+                        res.data.forEach(function(item) {
+                            subscribed[String(item.magazineId)] = true;
+                        });
+                        btns.forEach(function(btn) {
+                            var id = btn.getAttribute("data-magazine-id");
+                            if (subscribed[id]) {
+                                btn.textContent = "取消订阅";
+                                btn.setAttribute("data-subscribed", "1");
+                            } else {
+                                btn.textContent = "订阅杂志";
+                                btn.setAttribute("data-subscribed", "0");
+                            }
+                        });
+                    });
+            }
+
+            btns.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    var magazineId = btn.getAttribute("data-magazine-id");
+                    var subscribed = btn.getAttribute("data-subscribed") === "1";
+                    var url = subscribed ? "/portal/member/magazine/unsubscribe" : "/portal/member/magazine/subscribe";
+                    postForm(url, { magazineId: magazineId }).then(function(res) {
+                        if (res.code !== 0) {
+                            alert(res.msg || "操作失败，请先登录会员账号");
+                            if ((res.msg || "").indexOf("请先登录") > -1) {
+                                window.location.href = "/portal/login";
+                            }
+                            return;
+                        }
+                        refreshStatus();
+                    }).catch(function() {
+                        alert("网络异常，请稍后重试");
+                    });
+                });
+            });
+
+            refreshStatus();
+        })();
+    </script>
 </body>
 </html>

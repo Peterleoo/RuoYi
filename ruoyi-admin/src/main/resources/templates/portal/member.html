@@ -55,6 +55,28 @@
         </div>
     </section>
 
+    <section class="content-section">
+        <div class="container">
+            <div class="card">
+                <h3 class="card-title">我的杂志订阅</h3>
+                <div id="member-subscription-list">
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="card">
+                <h3 class="card-title">我的学习进度</h3>
+                <div id="member-progress-list">
+                    <p>加载中...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 会员体系 -->
     <section class="member-system">
         <div class="container">
@@ -321,5 +343,84 @@
     <!-- 字体控制脚本 -->
     <script src="/portal/js/font-control.js"></script>
     <script src="/portal/js/a11y.js"></script>
+    <script>
+        (function() {
+            function escapeHtml(str) {
+                return String(str || "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
+
+            function fillSubscription(list) {
+                var box = document.getElementById("member-subscription-list");
+                if (!box) {
+                    return;
+                }
+                if (!Array.isArray(list) || !list.length) {
+                    box.innerHTML = "<p>暂无订阅杂志，去 <a href='/portal/magazine'>杂志天地</a> 订阅吧。</p>";
+                    return;
+                }
+                var html = "<ul>";
+                list.forEach(function(item) {
+                    html += "<li style='margin:8px 0;'>" +
+                        "<strong>" + escapeHtml(item.magazineTitle || "未命名杂志") + "</strong>" +
+                        "（期号：" + escapeHtml(item.magazineIssue || "--") + "）" +
+                        "</li>";
+                });
+                html += "</ul>";
+                box.innerHTML = html;
+            }
+
+            function fillProgress(list) {
+                var box = document.getElementById("member-progress-list");
+                if (!box) {
+                    return;
+                }
+                if (!Array.isArray(list) || !list.length) {
+                    box.innerHTML = "<p>暂无学习进度，去 <a href='/portal/course'>在线课程</a> 开始学习吧。</p>";
+                    return;
+                }
+                var html = "<ul>";
+                list.forEach(function(item) {
+                    var percent = Number(item.progressPercent || 0);
+                    html += "<li style='margin:8px 0;'>" +
+                        "<strong>" + escapeHtml(item.courseName || "未命名课程") + "</strong>" +
+                        "，学习进度：" + percent + "%" +
+                        "</li>";
+                });
+                html += "</ul>";
+                box.innerHTML = html;
+            }
+
+            fetch("/portal/member/subscriptions")
+                .then(function(resp) { return resp.json(); })
+                .then(function(res) {
+                    if (res.code !== 0) {
+                        fillSubscription([]);
+                        return;
+                    }
+                    fillSubscription(res.data || []);
+                })
+                .catch(function() {
+                    fillSubscription([]);
+                });
+
+            fetch("/portal/member/course/progress")
+                .then(function(resp) { return resp.json(); })
+                .then(function(res) {
+                    if (res.code !== 0) {
+                        fillProgress([]);
+                        return;
+                    }
+                    fillProgress(res.data || []);
+                })
+                .catch(function() {
+                    fillProgress([]);
+                });
+        })();
+    </script>
 </body>
 </html>

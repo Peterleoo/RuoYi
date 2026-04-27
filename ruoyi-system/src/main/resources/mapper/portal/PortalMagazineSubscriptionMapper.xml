@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.portal.mapper.PortalMagazineSubscriptionMapper">
+
+    <resultMap id="PortalMagazineSubscriptionResult" type="com.ruoyi.portal.domain.PortalMagazineSubscription">
+        <id property="subscriptionId" column="subscription_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="magazineId" column="magazine_id"/>
+        <result property="status" column="status"/>
+        <result property="subscribeTime" column="subscribe_time"/>
+        <result property="cancelTime" column="cancel_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="magazineTitle" column="magazine_title"/>
+        <result property="magazineCover" column="magazine_cover"/>
+        <result property="magazineIssue" column="magazine_issue"/>
+        <result property="publishYear" column="publish_year"/>
+        <result property="publishDate" column="publish_date"/>
+    </resultMap>
+
+    <sql id="selectPortalMagazineSubscriptionVo">
+        select s.subscription_id, s.member_id, s.magazine_id, s.status, s.subscribe_time, s.cancel_time,
+               s.create_by, s.create_time, s.update_by, s.update_time, s.remark,
+               m.magazine_title, m.magazine_cover, m.magazine_issue, m.publish_year, m.publish_date
+        from portal_magazine_subscription s
+        left join portal_magazine m on s.magazine_id = m.magazine_id
+    </sql>
+
+    <select id="selectByMemberAndMagazine" resultMap="PortalMagazineSubscriptionResult">
+        <include refid="selectPortalMagazineSubscriptionVo"/>
+        where s.member_id = #{memberId} and s.magazine_id = #{magazineId}
+        limit 1
+    </select>
+
+    <select id="selectByMemberId" parameterType="Long" resultMap="PortalMagazineSubscriptionResult">
+        <include refid="selectPortalMagazineSubscriptionVo"/>
+        where s.member_id = #{memberId} and s.status = '0'
+        order by s.subscribe_time desc, s.subscription_id desc
+    </select>
+
+    <insert id="insertPortalMagazineSubscription" parameterType="com.ruoyi.portal.domain.PortalMagazineSubscription" useGeneratedKeys="true" keyProperty="subscriptionId">
+        insert into portal_magazine_subscription
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">member_id,</if>
+            <if test="magazineId != null">magazine_id,</if>
+            <if test="status != null">status,</if>
+            <if test="subscribeTime != null">subscribe_time,</if>
+            <if test="cancelTime != null">cancel_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="memberId != null">#{memberId},</if>
+            <if test="magazineId != null">#{magazineId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="subscribeTime != null">#{subscribeTime},</if>
+            <if test="cancelTime != null">#{cancelTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePortalMagazineSubscription" parameterType="com.ruoyi.portal.domain.PortalMagazineSubscription">
+        update portal_magazine_subscription
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="subscribeTime != null">subscribe_time = #{subscribeTime},</if>
+            <if test="cancelTime != null">cancel_time = #{cancelTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where subscription_id = #{subscriptionId}
+    </update>
+
+</mapper>

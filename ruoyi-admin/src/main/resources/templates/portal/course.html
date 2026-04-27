@@ -39,6 +39,15 @@
                     <p class="portal-course-link" th:if="${course.replayVideoUrl != null and course.replayVideoUrl != ''}">
                         <a th:href="${course.replayVideoUrl}" target="_blank">查看录播视频</a>
                     </p>
+                    <div class="portal-course-progress" th:attr="data-course-id=${course.courseId}" style="margin-top:12px;">
+                        <p>我的进度：<span class="progress-text">0%</span></p>
+                        <p>
+                            <button class="btn btn-primary progress-save-btn" data-progress="25">学习到25%</button>
+                            <button class="btn btn-primary progress-save-btn" data-progress="50" style="margin-left:6px;">学习到50%</button>
+                            <button class="btn btn-primary progress-save-btn" data-progress="75" style="margin-left:6px;">学习到75%</button>
+                            <button class="btn btn-primary progress-save-btn" data-progress="100" style="margin-left:6px;">完成课程</button>
+                        </p>
+                    </div>
                 </article>
             </div>
             <p class="portal-action-row">
@@ -49,5 +58,75 @@
 </section>
 <script src="/portal/js/font-control.js"></script>
 <script src="/portal/js/a11y.js"></script>
+<script>
+    (function() {
+        var blocks = document.querySelectorAll(".portal-course-progress");
+        if (!blocks.length) {
+            return;
+        }
+
+        function postForm(url, params) {
+            return fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+                body: new URLSearchParams(params).toString()
+            }).then(function(resp) { return resp.json(); });
+        }
+
+        function applyProgressMap(map) {
+            blocks.forEach(function(block) {
+                var courseId = block.getAttribute("data-course-id");
+                var percent = map[courseId] || 0;
+                var textNode = block.querySelector(".progress-text");
+                if (textNode) {
+                    textNode.textContent = percent + "%";
+                }
+            });
+        }
+
+        function loadProgress() {
+            fetch("/portal/member/course/progress")
+                .then(function(resp) { return resp.json(); })
+                .then(function(res) {
+                    if (res.code !== 0 || !Array.isArray(res.data)) {
+                        return;
+                    }
+                    var map = {};
+                    res.data.forEach(function(item) {
+                        map[String(item.courseId)] = item.progressPercent || 0;
+                    });
+                    applyProgressMap(map);
+                });
+        }
+
+        blocks.forEach(function(block) {
+            var courseId = block.getAttribute("data-course-id");
+            block.querySelectorAll(".progress-save-btn").forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    var progress = btn.getAttribute("data-progress");
+                    postForm("/portal/member/course/progress", {
+                        courseId: courseId,
+                        progressPercent: progress,
+                        progressStatus: progress === "100" ? "2" : "1",
+                        studyMinutes: Number(progress)
+                    }).then(function(res) {
+                        if (res.code !== 0) {
+                            alert(res.msg || "保存失败，请先登录会员账号");
+                            if ((res.msg || "").indexOf("请先登录") > -1) {
+                                window.location.href = "/portal/login";
+                            }
+                            return;
+                        }
+                        loadProgress();
+                    }).catch(function() {
+                        alert("网络异常，请稍后重试");
+                    });
+                });
+            });
+        });
+
+        loadProgress();
+    })();
+</script>
 </body>
 </html>
