@@ -19,8 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="currentRegistrations" column="current_registrations"/>
         <result property="activityStatus" column="activity_status"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
@@ -30,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPortalActivityVo">
         select a.activity_id, a.school_id, a.activity_name, a.category, a.cover_image, a.activity_content,
                a.start_time, a.end_time, a.registration_deadline, a.location, a.capacity, a.current_registrations,
-               a.activity_status, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.remark,
+               a.activity_status, a.status, a.creator_id, a.create_by, a.create_time, a.updater_id, a.update_by, a.update_time, a.remark,
                s.school_name
         from portal_activity a
         left join portal_school s on a.school_id = s.school_id
@@ -59,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">
                 and a.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
         order by a.activity_id desc
     </select>
@@ -79,8 +82,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="currentRegistrations != null">current_registrations,</if>
             <if test="activityStatus != null">activity_status,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -99,8 +104,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="currentRegistrations != null">#{currentRegistrations},</if>
             <if test="activityStatus != null">#{activityStatus},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -123,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="currentRegistrations != null">current_registrations = #{currentRegistrations},</if>
             <if test="activityStatus != null">activity_status = #{activityStatus},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,11 +96,11 @@
 
             <!-- 快速入口 -->
             <div class="quick-nav">
-                <a href="/portal/magazine/subscribe" class="nav-item">
+                <a href="/portal/magazine" class="nav-item">
                     <div class="icon-box color-1"><i class="fa fa-book"></i></div>
                     <span>杂志订阅</span>
                 </a>
-                <a href="/portal/university/search" class="nav-item">
+                <a href="/portal/university" class="nav-item">
                     <div class="icon-box color-2"><i class="fa fa-university"></i></div>
                     <span>大学查询</span>
                 </a>
@@ -177,37 +177,22 @@
 
             <div class="section-title-wrap courses-head" style="margin-top: 40px;">
                 <h3 class="section-title">热门课程</h3>
-                <a href="#" class="more-link">查看更多课程 <i class="fa fa-angle-right"></i></a>
+                <a href="/portal/course" class="more-link">查看更多课程 <i class="fa fa-angle-right"></i></a>
             </div>
             <div class="course-grid">
-                <!-- 课程卡片 -->
-                <div class="course-card">
-                    <div class="course-img" style="background-image: url('/portal/img/course1.jpg');"></div>
+                <div class="course-card" th:each="course : ${hotCourses}">
+                    <div class="course-img" th:style="${(course.coverImage != null and course.coverImage != '') ? 'background-image:url(' + course.coverImage + ');' : ''}"></div>
                     <div class="course-info">
-                        <h4>水墨画零基础入门</h4>
-                        <p class="course-meta"><span>主讲：清风老师</span><span>1500人已学</span></p>
+                        <h4 th:text="${course.courseName}">课程名称</h4>
+                        <p class="course-meta">
+                            <span th:text="'主讲：' + (${course.teacherName} ?: '待分配')">主讲：待分配</span>
+                            <span th:text="${course.enrollmentStatus} ?: '招生中'">招生中</span>
+                        </p>
                     </div>
                 </div>
-                <div class="course-card">
-                    <div class="course-img" style="background-image: url('/portal/img/course2.jpg');"></div>
-                    <div class="course-info">
-                        <h4>太极拳二十四式教学</h4>
-                        <p class="course-meta"><span>主讲：王大师</span><span>2800人已学</span></p>
-                    </div>
-                </div>
-                <div class="course-card">
-                    <div class="course-img" style="background-image: url('/portal/img/course3.jpg');"></div>
-                    <div class="course-info">
-                        <h4>老年社交舞精选</h4>
-                        <p class="course-meta"><span>主讲：李老师</span><span>1200人已学</span></p>
-                    </div>
-                </div>
-                <div class="course-card">
-                    <div class="course-img" style="background-image: url('/portal/img/course4.jpg');"></div>
-                    <div class="course-info">
-                        <h4>手机短视频剪辑指南</h4>
-                        <p class="course-meta"><span>主讲：小陈老师</span><span>3500人已学</span></p>
-                    </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(hotCourses)}">
+                    <h5>暂无课程数据</h5>
+                    <p>请在后台课程管理中补充课程。</p>
                 </div>
             </div>
 
@@ -218,19 +203,19 @@
                         <h3 class="section-title small">活动预告</h3>
                     </div>
                     <div class="event-list">
-                        <div class="event-item">
-                            <div class="event-date"><span>11</span>12月</div>
+                        <div class="event-item" th:each="activity,stat : ${upcomingActivities}">
+                            <div class="event-date" th:classappend="${stat.index % 2 == 1} ? ' blue' : ''">
+                                <span th:text="${activity.startTime != null ? #dates.format(activity.startTime,'dd') : '--'}">--</span>
+                                <span th:text="${activity.startTime != null ? #dates.format(activity.startTime,'MM') + '月' : '--月'}">--月</span>
+                            </div>
                             <div class="event-desc">
-                                <h5>线上：银龄养生专家讲座</h5>
-                                <p>主讲人：省中医医院院长 腾讯会议号：123-456</p>
+                                <h5 th:text="${activity.activityName}">活动名称</h5>
+                                <p th:text="'地点：' + (${activity.location} ?: '待定')">地点：待定</p>
                             </div>
                         </div>
-                        <div class="event-item">
-                            <div class="event-date blue"><span>15</span>12月</div>
-                            <div class="event-desc">
-                                <h5>线下：全省书法临摹大赛</h5>
-                                <p>地点：省老年服务中心 3楼大礼堂</p>
-                            </div>
+                        <div class="empty-state" th:if="${#lists.isEmpty(upcomingActivities)}">
+                            <h5>暂无活动预告</h5>
+                            <p>可在后台活动管理中发布。</p>
                         </div>
                     </div>
                 </div>
@@ -241,31 +226,15 @@
                         <h3 class="section-title small">人气文章</h3>
                     </div>
                     <div class="popular-posts">
-                        <a href="#" class="post-item">
-                            <span class="rank rank-1">1</span>
-                            <span class="post-title">为何现在的退休生活比以往更精彩？</span>
-                            <span class="view-count">1.2w阅读</span>
+                        <a th:each="article,stat : ${popularArticles}" th:href="@{'/portal/news/' + ${article.contentId}}" class="post-item">
+                            <span class="rank" th:classappend="${stat.index == 0 ? ' rank-1' : (stat.index == 1 ? ' rank-2' : (stat.index == 2 ? ' rank-3' : ''))}" th:text="${stat.index + 1}">1</span>
+                            <span class="post-title" th:text="${article.title}">文章标题</span>
+                            <span class="view-count" th:text="${(article.viewCount ?: 0) + '阅读'}">0阅读</span>
                         </a>
-                        <a href="#" class="post-item">
-                            <span class="rank rank-2">2</span>
-                            <span class="post-title">2024年度老年福利政策汇总（独家）</span>
-                            <span class="view-count">8.5k阅读</span>
-                        </a>
-                        <a href="#" class="post-item">
-                            <span class="rank rank-3">3</span>
-                            <span class="post-title">这5个坏习惯，正在悄悄偷走老人的健康</span>
-                            <span class="view-count">7.2k阅读</span>
-                        </a>
-                        <a href="#" class="post-item">
-                            <span class="rank">4</span>
-                            <span class="post-title">如何在家也能参加“云端”老年大学？</span>
-                            <span class="view-count">5.1k阅读</span>
-                        </a>
-                        <a href="#" class="post-item">
-                            <span class="rank">5</span>
-                            <span class="post-title">湘水情长：镜头里的湖南美景</span>
-                            <span class="view-count">4.8k阅读</span>
-                        </a>
+                        <div class="empty-state" th:if="${#lists.isEmpty(popularArticles)}">
+                            <h5>暂无文章</h5>
+                            <p>请在后台内容管理中发布。</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -286,22 +255,14 @@
                         <a href="/portal/course" class="feature-more">查看全部</a>
                     </div>
                     <div class="course-cards">
-                        <a href="/portal/course" class="mini-course-card">
-                            <span class="mini-course-name">国画花鸟临摹进阶</span>
-                            <span class="mini-course-meta">主讲：周老师 · 2100人已学</span>
+                        <a href="/portal/course" class="mini-course-card" th:each="course : ${miniCourses}">
+                            <span class="mini-course-name" th:text="${course.courseName}">课程名称</span>
+                            <span class="mini-course-meta" th:text="'主讲：' + (${course.teacherName} ?: '待分配') + ' · ' + (${course.enrollmentStatus} ?: '招生中')">主讲：待分配 · 招生中</span>
                         </a>
-                        <a href="/portal/course" class="mini-course-card">
-                            <span class="mini-course-name">老年手机摄影实战课</span>
-                            <span class="mini-course-meta">主讲：陈老师 · 1800人已学</span>
-                        </a>
-                        <a href="/portal/course" class="mini-course-card">
-                            <span class="mini-course-name">八段锦居家养生训练</span>
-                            <span class="mini-course-meta">主讲：刘老师 · 2600人已学</span>
-                        </a>
-                        <a href="/portal/course" class="mini-course-card">
-                            <span class="mini-course-name">短视频剪辑快速入门</span>
-                            <span class="mini-course-meta">主讲：小陈老师 · 3500人已学</span>
-                        </a>
+                        <div class="empty-state" th:if="${#lists.isEmpty(miniCourses)}">
+                            <h5>暂无课程</h5>
+                            <p>请先在后台新增课程。</p>
+                        </div>
                     </div>
                 </div>
                 

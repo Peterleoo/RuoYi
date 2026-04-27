@@ -11,7 +11,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-school-edit" th:object="${school}" enctype="multipart/form-data">
+    <form class="form-horizontal m" id="form-school-edit" th:object="${school}">
         <input name="schoolId" type="hidden" th:field="*{schoolId}">
         <input type="hidden" id="enrollmentBrochureInput" name="enrollmentBrochure" th:value="*{enrollmentBrochure}">
         <div class="form-group">
@@ -105,7 +105,7 @@
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: select2-js" />
 <th:block th:include="include :: summernote-js" />
-<script th:inline="javascript">
+<script>
     var prefix = ctx + "admin/portal/school";
     if ($.fn.modal && $.fn.modal.Constructor) {
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -129,31 +129,13 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            $("#enrollmentBrochureInput").val($('.summernote').summernote('code'));
-            var formData = new FormData(document.getElementById("form-school-edit"));
-            $.ajax({
-                url: prefix + "/edit",
-                type: "post",
-                dataType: "json",
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function(xhr, settings) {
-                    var csrftoken = $('meta[name=csrf-token]').attr('content');
-                    if ($.common.equalsIgnoreCase(settings.type, "POST")) {
-                        xhr.setRequestHeader("X-CSRF-Token", csrftoken);
-                    }
-                    $.modal.loading("正在处理中，请稍候...");
-                    $.modal.disable();
-                },
-                success: function(result) {
-                    $.operate.successCallback(result);
-                },
-                error: function() {
-                    $.modal.closeLoading();
-                    $.modal.alertError("提交失败，请重试");
-                }
-            });
+            var html = $('.summernote').summernote('code');
+            if (html && /data:[^;]+;base64,/i.test(html)) {
+                $.modal.alertError("检测到Base64资源，请先使用上传功能并插入URL后再提交");
+                return;
+            }
+            $("#enrollmentBrochureInput").val(html);
+            $.operate.save(prefix + "/edit", $('#form-school-edit').serialize());
         }
     }
 </script>

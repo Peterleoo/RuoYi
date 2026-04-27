@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${article != null ? article.title + ' - 湖南老年人杂志社' : '资讯详情 - 湖南老年人杂志社'}">资讯详情</title>
+    <link rel="stylesheet" href="/portal/css/style.css">
+</head>
+<body class="font-medium">
+<section class="page-title">
+    <div class="container"><h1>资讯详情</h1></div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="card" th:if="${article != null}">
+            <h3 class="card-title" th:text="${article.title}">文章标题</h3>
+            <p class="date">
+                <span th:text="${article.publishTime != null ? #dates.format(article.publishTime,'yyyy-MM-dd HH:mm') : '未发布'}">未发布</span>
+                <span style="margin-left:12px;" th:text="'阅读 ' + (${article.viewCount} ?: 0)">阅读 0</span>
+                <span style="margin-left:12px;" th:text="'来源：' + (${article.source} ?: '本站')">来源：本站</span>
+            </p>
+            <p class="summary" th:if="${article.summary != null and article.summary != ''}" th:text="${article.summary}">摘要</p>
+            <div class="intro-content" th:utext="${article.content}">正文内容</div>
+            <p style="margin-top: 16px;">
+                <a class="btn btn-primary" href="/portal/news">返回资讯列表</a>
+            </p>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <h3 class="card-title">最新资讯</h3>
+            <div class="news-list" th:if="${!#lists.isEmpty(latestArticles)}">
+                <div class="news-item" th:each="item : ${latestArticles}">
+                    <h4><a th:href="@{'/portal/news/' + ${item.contentId}}" th:text="${item.title}">文章标题</a></h4>
+                    <p class="date" th:text="${item.publishTime != null ? #dates.format(item.publishTime,'yyyy-MM-dd HH:mm') : '未发布'}">未发布</p>
+                </div>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(latestArticles)}">
+                <h5>暂无资讯</h5>
+                <p>请先在后台发布内容。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/portal/js/font-control.js"></script>
+<script src="/portal/js/a11y.js"></script>
+</body>
+</html>

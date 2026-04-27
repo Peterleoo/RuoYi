@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <!-- SpringBoot Web容器 (包含嵌入式Tomcat) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- MySQL驱动 -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -47,8 +53,6 @@
             <artifactId>ruoyi-quartz</artifactId>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
@@ -76,39 +80,6 @@
                     <warName>${project.artifactId}</warName>
                 </configuration>   
             </plugin>   
-            <!-- YUI Compressor (CSS/JS压缩) 
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>yuicompressor-maven-plugin</artifactId>
-                <version>1.5.1</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>compress</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <jswarn>false</jswarn>
-                    <nosuffix>true</nosuffix>
-                    <linebreakpos>50000</linebreakpos>
-                    <sourceDirectory>src/main/resources/static</sourceDirectory>
-                    <force>true</force>
-                    <includes>
-                        <include>**/*.js</include>
-                        <include>**/*.css</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/*.min.js</exclude>
-                        <exclude>**/*.min.css</exclude>
-                        <exclude>**/fileinput.js</exclude>
-                        <exclude>**/validate/**</exclude>
-                        <exclude>**/bootstrap-table/**</exclude>
-                    </excludes>
-                </configuration>
-            </plugin> -->
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>

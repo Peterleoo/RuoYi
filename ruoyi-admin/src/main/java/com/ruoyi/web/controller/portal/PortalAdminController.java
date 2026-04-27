@@ -5,6 +5,7 @@ import com.ruoyi.portal.domain.PortalUniversity;
 import com.ruoyi.portal.domain.PortalMember;
 import com.ruoyi.portal.domain.PortalMenu;
 import com.ruoyi.portal.domain.PortalContent;
+import com.ruoyi.portal.domain.PortalContentCategory;
 import com.ruoyi.portal.domain.PortalSchool;
 import com.ruoyi.portal.domain.PortalTeacher;
 import com.ruoyi.portal.domain.PortalCourse;
@@ -15,6 +16,7 @@ import com.ruoyi.portal.service.IPortalUniversityService;
 import com.ruoyi.portal.service.IPortalMemberService;
 import com.ruoyi.portal.service.IPortalMenuService;
 import com.ruoyi.portal.service.IPortalContentService;
+import com.ruoyi.portal.service.IPortalContentCategoryService;
 import com.ruoyi.portal.service.IPortalSchoolService;
 import com.ruoyi.portal.service.IPortalTeacherService;
 import com.ruoyi.portal.service.IPortalCourseService;
@@ -61,6 +63,9 @@ public class PortalAdminController extends BaseController {
 
     @Autowired
     private IPortalContentService portalContentService;
+
+    @Autowired
+    private IPortalContentCategoryService portalContentCategoryService;
 
     @Autowired
     private IPortalSchoolService portalSchoolService;
@@ -158,6 +163,9 @@ public class PortalAdminController extends BaseController {
     @GetMapping("/content")
     public String content(ModelMap mmap) {
         mmap.put("schools", portalSchoolService.selectPortalSchoolList(new PortalSchool()));
+        PortalContentCategory categoryQuery = new PortalContentCategory();
+        categoryQuery.setStatus("0");
+        mmap.put("categories", portalContentCategoryService.selectPortalContentCategoryList(categoryQuery));
         return "admin/portal/content";
     }
 
@@ -179,6 +187,9 @@ public class PortalAdminController extends BaseController {
     @GetMapping("/content/add")
     public String addContent(ModelMap mmap) {
         mmap.put("schools", portalSchoolService.selectPortalSchoolList(new PortalSchool()));
+        PortalContentCategory categoryQuery = new PortalContentCategory();
+        categoryQuery.setStatus("0");
+        mmap.put("categories", portalContentCategoryService.selectPortalContentCategoryList(categoryQuery));
         return "admin/portal/content-add";
     }
 
@@ -199,7 +210,78 @@ public class PortalAdminController extends BaseController {
     public String editContent(@PathVariable("contentId") Long contentId, ModelMap mmap) {
         mmap.put("content", portalContentService.selectPortalContentById(contentId));
         mmap.put("schools", portalSchoolService.selectPortalSchoolList(new PortalSchool()));
+        PortalContentCategory categoryQuery = new PortalContentCategory();
+        categoryQuery.setStatus("0");
+        mmap.put("categories", portalContentCategoryService.selectPortalContentCategoryList(categoryQuery));
         return "admin/portal/content-edit";
+    }
+
+    /**
+     * 内容分类管理页面
+     */
+    @RequiresPermissions("portal:contentCategory:view")
+    @GetMapping("/content/category")
+    public String contentCategory() {
+        return "admin/portal/content-category";
+    }
+
+    /**
+     * 内容分类列表
+     */
+    @RequiresPermissions("portal:contentCategory:list")
+    @PostMapping("/content/category/list")
+    @ResponseBody
+    public TableDataInfo contentCategoryList(PortalContentCategory category) {
+        startPage();
+        List<PortalContentCategory> list = portalContentCategoryService.selectPortalContentCategoryList(category);
+        return getDataTable(list);
+    }
+
+    /**
+     * 新增内容分类页面
+     */
+    @GetMapping("/content/category/add")
+    public String addContentCategory() {
+        return "admin/portal/content-category-add";
+    }
+
+    /**
+     * 新增保存内容分类
+     */
+    @RequiresPermissions("portal:contentCategory:add")
+    @PostMapping("/content/category/add")
+    @ResponseBody
+    public AjaxResult addContentCategorySave(PortalContentCategory category) {
+        return toAjax(portalContentCategoryService.insertPortalContentCategory(category));
+    }
+
+    /**
+     * 编辑内容分类页面
+     */
+    @GetMapping("/content/category/edit/{categoryId}")
+    public String editContentCategory(@PathVariable("categoryId") Long categoryId, ModelMap mmap) {
+        mmap.put("category", portalContentCategoryService.selectPortalContentCategoryById(categoryId));
+        return "admin/portal/content-category-edit";
+    }
+
+    /**
+     * 修改保存内容分类
+     */
+    @RequiresPermissions("portal:contentCategory:edit")
+    @PostMapping("/content/category/edit")
+    @ResponseBody
+    public AjaxResult editContentCategorySave(PortalContentCategory category) {
+        return toAjax(portalContentCategoryService.updatePortalContentCategory(category));
+    }
+
+    /**
+     * 删除内容分类
+     */
+    @RequiresPermissions("portal:contentCategory:remove")
+    @PostMapping("/content/category/remove")
+    @ResponseBody
+    public AjaxResult removeContentCategory(Long[] categoryIds) {
+        return toAjax(portalContentCategoryService.deletePortalContentCategoryByIds(categoryIds));
     }
 
     /**

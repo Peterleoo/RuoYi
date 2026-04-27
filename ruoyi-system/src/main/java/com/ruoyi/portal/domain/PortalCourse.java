@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 课程对象 portal_course
@@ -25,11 +27,14 @@ public class PortalCourse implements Serializable {
     private BigDecimal tuitionFee;
     private String enrollmentStatus;
     private String status;
+    private Long creatorId;
     private String createBy;
     private Date createTime;
+    private Long updaterId;
     private String updateBy;
     private Date updateTime;
     private String remark;
+    private Map<String, Object> params;
 
     /** 展示字段 */
     private String schoolName;
@@ -139,6 +144,14 @@ public class PortalCourse implements Serializable {
         this.createBy = createBy;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -155,6 +168,14 @@ public class PortalCourse implements Serializable {
         this.updateBy = updateBy;
     }
 
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -169,6 +190,17 @@ public class PortalCourse implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 
     public String getSchoolName() {
@@ -202,8 +234,10 @@ public class PortalCourse implements Serializable {
                 .append("tuitionFee", tuitionFee)
                 .append("enrollmentStatus", enrollmentStatus)
                 .append("status", status)
+                .append("creatorId", creatorId)
                 .append("createBy", createBy)
                 .append("createTime", createTime)
+                .append("updaterId", updaterId)
                 .append("updateBy", updateBy)
                 .append("updateTime", updateTime)
                 .append("remark", remark)
@@ -212,4 +246,3 @@ public class PortalCourse implements Serializable {
                 .toString();
     }
 }
-

@@ -15,43 +15,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="h5Url" column="h5_url"/>
         <result property="introduction" column="introduction"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectPortalMagazineVo">
-        select magazine_id, magazine_title, magazine_cover, magazine_issue, publish_year, publish_date,
-               magazine_content, magazine_pdf, h5_url, introduction, status, create_by, create_time,
-               update_by, update_time, remark
-        from portal_magazine
+        select m.magazine_id, m.magazine_title, m.magazine_cover, m.magazine_issue, m.publish_year, m.publish_date,
+               m.magazine_content, m.magazine_pdf, m.h5_url, m.introduction, m.status, m.creator_id, m.create_by, m.create_time,
+               m.updater_id, m.update_by, m.update_time, m.remark
+        from portal_magazine m
+        left join sys_user su on su.user_id = m.creator_id
     </sql>
 
     <select id="selectPortalMagazineById" parameterType="Long" resultMap="PortalMagazineResult">
         <include refid="selectPortalMagazineVo"/>
-        where magazine_id = #{magazineId}
+        where m.magazine_id = #{magazineId}
     </select>
 
     <select id="selectPortalMagazineList" parameterType="com.ruoyi.portal.domain.PortalMagazine" resultMap="PortalMagazineResult">
         <include refid="selectPortalMagazineVo"/>
         <where>
             <if test="magazineTitle != null and magazineTitle != ''">
-                and magazine_title like concat('%', #{magazineTitle}, '%')
+                and m.magazine_title like concat('%', #{magazineTitle}, '%')
             </if>
             <if test="magazineIssue != null and magazineIssue != ''">
-                and magazine_issue like concat('%', #{magazineIssue}, '%')
+                and m.magazine_issue like concat('%', #{magazineIssue}, '%')
             </if>
             <if test="publishYear != null">
-                and publish_year = #{publishYear}
+                and m.publish_year = #{publishYear}
             </if>
             <if test="publishDate != null">
-                and publish_date = #{publishDate}
+                and m.publish_date = #{publishDate}
             </if>
             <if test="status != null and status != ''">
-                and status = #{status}
+                and m.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
     </select>
 
@@ -68,8 +72,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="h5Url != null">h5_url,</if>
             <if test="introduction != null">introduction,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -85,8 +91,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="h5Url != null">#{h5Url},</if>
             <if test="introduction != null">#{introduction},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -106,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="h5Url != null">h5_url = #{h5Url},</if>
             <if test="introduction != null">introduction = #{introduction},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

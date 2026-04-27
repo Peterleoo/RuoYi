@@ -14,8 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="articleId" column="article_id"/>
         <result property="courseId" column="course_id"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
@@ -25,11 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectPortalMediaVo">
         select m.media_id, m.title, m.media_type, m.cover_image, m.media_url, m.duration,
-               m.article_id, m.course_id, m.status, m.create_by, m.create_time, m.update_by, m.update_time, m.remark,
+               m.article_id, m.course_id, m.status, m.creator_id, m.create_by, m.create_time, m.updater_id, m.update_by, m.update_time, m.remark,
                a.title as article_title, c.course_name
         from portal_media m
         left join portal_content a on m.article_id = a.content_id
         left join portal_course c on m.course_id = c.course_id
+        left join sys_user su on su.user_id = m.creator_id
     </sql>
 
     <select id="selectPortalMediaById" parameterType="Long" resultMap="PortalMediaResult">
@@ -49,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">
                 and m.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
         order by m.media_id desc
     </select>
@@ -64,8 +68,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="articleId != null">article_id,</if>
             <if test="courseId != null">course_id,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -79,8 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="articleId != null">#{articleId},</if>
             <if test="courseId != null">#{courseId},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -98,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="articleId != null">article_id = #{articleId},</if>
             <if test="courseId != null">course_id = #{courseId},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

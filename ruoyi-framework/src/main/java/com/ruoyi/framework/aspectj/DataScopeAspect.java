@@ -2,6 +2,8 @@ package com.ruoyi.framework.aspectj;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.lang.reflect.Method;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -135,11 +137,7 @@ public class DataScopeAspect
         if (StringUtils.isNotBlank(sqlString.toString()))
         {
             Object params = joinPoint.getArgs()[0];
-            if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
-            {
-                BaseEntity baseEntity = (BaseEntity) params;
-                baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
-            }
+            putDataScope(params, " AND (" + sqlString.substring(4) + ")");
         }
     }
 
@@ -149,10 +147,36 @@ public class DataScopeAspect
     private void clearDataScope(final JoinPoint joinPoint)
     {
         Object params = joinPoint.getArgs()[0];
-        if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
+        putDataScope(params, "");
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void putDataScope(Object params, String value)
+    {
+        if (StringUtils.isNull(params))
+        {
+            return;
+        }
+
+        if (params instanceof BaseEntity)
         {
             BaseEntity baseEntity = (BaseEntity) params;
-            baseEntity.getParams().put(DATA_SCOPE, "");
+            baseEntity.getParams().put(DATA_SCOPE, value);
+            return;
+        }
+
+        try
+        {
+            Method method = params.getClass().getMethod("getParams");
+            Object mapObj = method.invoke(params);
+            if (mapObj instanceof Map)
+            {
+                ((Map<String, Object>) mapObj).put(DATA_SCOPE, value);
+            }
+        }
+        catch (Exception ignored)
+        {
+            // 非 BaseEntity 且无 getParams 的对象忽略数据权限注入
         }
     }
 }

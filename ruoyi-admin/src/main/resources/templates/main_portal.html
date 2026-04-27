@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业务驾驶舱</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
+    <style>
+        :root {
+            --brand-a: #0f5d7a;
+            --brand-b: #1b8f6a;
+            --panel-shadow: 0 10px 30px rgba(15, 41, 55, 0.08);
+            --muted: #6b7f8d;
+            --line: #e8eff3;
+            --bg-soft: #f4f8fa;
+        }
+        body.gray-bg {
+            background:
+                radial-gradient(circle at 12% 16%, rgba(27, 143, 106, 0.12), transparent 32%),
+                radial-gradient(circle at 88% 10%, rgba(15, 93, 122, 0.13), transparent 30%),
+                linear-gradient(180deg, #f6fbff 0%, #f1f6f9 100%);
+        }
+        .dashboard-wrap {
+            padding: 16px 18px 24px;
+        }
+        .hero {
+            background: linear-gradient(135deg, var(--brand-a), var(--brand-b));
+            color: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            box-shadow: var(--panel-shadow);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero:after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            right: -110px;
+            top: -120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .hero h2 {
+            margin: 0 0 6px;
+            font-size: 24px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        .hero p {
+            margin: 0;
+            opacity: 0.92;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-meta {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.16);
+            font-size: 12px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--panel-shadow);
+            padding: 14px 14px 12px;
+            border: 1px solid rgba(17, 76, 94, 0.06);
+            min-height: 110px;
+        }
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-value {
+            font-size: 30px;
+            line-height: 1.1;
+            color: #143648;
+            margin: 0;
+            font-weight: 700;
+        }
+        .stat-sub {
+            margin-top: 6px;
+            color: #7692a1;
+            font-size: 12px;
+        }
+        .panel-box {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--panel-shadow);
+            border: 1px solid rgba(19, 58, 74, 0.07);
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, #fcfefe 0%, var(--bg-soft) 100%);
+        }
+        .panel-head h4 {
+            margin: 0;
+            font-size: 15px;
+            color: #183d52;
+            font-weight: 700;
+        }
+        .panel-body {
+            padding: 12px 14px;
+        }
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 10px;
+            color: #1e4d63;
+            transition: all .2s ease;
+            text-decoration: none;
+            background: #fff;
+        }
+        .shortcut-item:hover {
+            border-color: #85b9a5;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 143, 106, 0.14);
+            text-decoration: none;
+        }
+        .shortcut-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 15px;
+            background: linear-gradient(145deg, #1a7d8a, #1ba46f);
+        }
+        .mini-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .mini-metric {
+            border: 1px dashed #d7e4eb;
+            border-radius: 10px;
+            padding: 10px;
+            background: #f8fcff;
+        }
+        .mini-metric .name {
+            font-size: 12px;
+            color: #5f7685;
+            margin-bottom: 6px;
+        }
+        .mini-metric .num {
+            margin: 0;
+            font-size: 24px;
+            color: #1e4d63;
+            font-weight: 700;
+        }
+        .list-clean {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .list-clean li {
+            border-bottom: 1px solid var(--line);
+            padding: 10px 0;
+        }
+        .list-clean li:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        .list-title {
+            color: #204e62;
+            font-weight: 600;
+            margin: 0 0 5px;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+        .list-meta {
+            color: #7b93a2;
+            font-size: 12px;
+        }
+        .empty-tip {
+            text-align: center;
+            color: #8ea2af;
+            padding: 18px 0;
+        }
+        @media (max-width: 1200px) {
+            .stat-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .shortcut-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 768px) {
+            .dashboard-wrap {
+                padding: 10px;
+            }
+            .hero h2 {
+                font-size: 20px;
+            }
+            .stat-grid,
+            .shortcut-grid,
+            .mini-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="dashboard-wrap">
+    <div class="hero">
+        <h2>门户业务运营驾驶舱</h2>
+        <p>聚焦学校、课程、内容、活动与会员全链路运营，帮助你快速发现问题并推进执行。</p>
+        <div class="hero-meta">
+            <span class="hero-chip">系统版本 v[[${version}]]</span>
+            <span class="hero-chip">资讯待审 [[${pendingAuditCount}]] 条</span>
+            <span class="hero-chip">进行中活动 [[${onGoingActivityCount}]] 场</span>
+        </div>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-label"><i class="fa fa-university"></i> 学校机构</div>
+            <p class="stat-value" th:text="${schoolCount}">0</p>
+            <div class="stat-sub">在运营：<span th:text="${activeSchoolCount}">0</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><i class="fa fa-book"></i> 课程资源</div>
+            <p class="stat-value" th:text="${courseCount}">0</p>
+            <div class="stat-sub">已上架：<span th:text="${activeCourseCount}">0</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><i class="fa fa-users"></i> 师资与会员</div>
+            <p class="stat-value"><span th:text="${teacherCount}">0</span> / <span th:text="${memberCount}">0</span></p>
+            <div class="stat-sub">活跃会员：<span th:text="${activeMemberCount}">0</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label"><i class="fa fa-newspaper-o"></i> 资讯活动</div>
+            <p class="stat-value"><span th:text="${contentCount}">0</span> / <span th:text="${activityCount}">0</span></p>
+            <div class="stat-sub">媒体资源：<span th:text="${mediaCount}">0</span></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel-box">
+                <div class="panel-head">
+                    <h4>常用业务入口</h4>
+                    <span class="text-muted">高频模块直达</span>
+                </div>
+                <div class="panel-body">
+                    <div class="shortcut-grid">
+                        <a class="shortcut-item" shiro:hasPermission="portal:school:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/school}" onclick="openPortalTab(this, '学校管理')">
+                            <span class="shortcut-icon"><i class="fa fa-university"></i></span>
+                            <span>学校管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:course:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/course}" onclick="openPortalTab(this, '课程管理')">
+                            <span class="shortcut-icon"><i class="fa fa-graduation-cap"></i></span>
+                            <span>课程管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:teacher:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/teacher}" onclick="openPortalTab(this, '教师管理')">
+                            <span class="shortcut-icon"><i class="fa fa-id-badge"></i></span>
+                            <span>教师管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:member:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/member}" onclick="openPortalTab(this, '会员管理')">
+                            <span class="shortcut-icon"><i class="fa fa-user-circle"></i></span>
+                            <span>会员管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:content:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/content}" onclick="openPortalTab(this, '资讯管理')">
+                            <span class="shortcut-icon"><i class="fa fa-file-text-o"></i></span>
+                            <span>资讯管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:contentCategory:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/content/category}" onclick="openPortalTab(this, '分类管理')">
+                            <span class="shortcut-icon"><i class="fa fa-tags"></i></span>
+                            <span>分类管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:activity:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/activity}" onclick="openPortalTab(this, '活动管理')">
+                            <span class="shortcut-icon"><i class="fa fa-calendar"></i></span>
+                            <span>活动管理</span>
+                        </a>
+                        <a class="shortcut-item" shiro:hasPermission="portal:media:view" href="javascript:void(0)" th:attr="data-url=@{/admin/portal/media}" onclick="openPortalTab(this, '多媒体管理')">
+                            <span class="shortcut-icon"><i class="fa fa-play-circle"></i></span>
+                            <span>多媒体管理</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-box">
+                <div class="panel-head">
+                    <h4>最近资讯动态</h4>
+                    <a class="text-muted"
+                       shiro:hasPermission="portal:content:view"
+                       href="javascript:void(0)"
+                       th:attr="data-url=@{/admin/portal/content}"
+                       onclick="openPortalTab(this, '资讯管理')">查看更多</a>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-clean" th:if="${latestContents != null and !#lists.isEmpty(latestContents)}">
+                        <li th:each="item : ${latestContents}">
+                            <p class="list-title" th:text="${item.title}">资讯标题</p>
+                            <div class="list-meta">
+                                <span>分类：<span th:text="${#strings.isEmpty(item.category) ? '未分类' : item.category}">未分类</span></span>
+                                <span style="margin-left: 14px;">状态：<span th:text="${item.auditStatus == '1' ? '已通过' : (item.auditStatus == '2' ? '已驳回' : '待审核')}">待审核</span></span>
+                                <span style="margin-left: 14px;" th:text="${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="empty-tip" th:if="${latestContents == null or #lists.isEmpty(latestContents)}">暂无资讯数据</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel-box">
+                <div class="panel-head">
+                    <h4>运营观察</h4>
+                    <span class="text-muted">关键信号</span>
+                </div>
+                <div class="panel-body">
+                    <div class="mini-metrics">
+                        <div class="mini-metric">
+                            <div class="name">资讯待审核</div>
+                            <p class="num" th:text="${pendingAuditCount}">0</p>
+                        </div>
+                        <div class="mini-metric">
+                            <div class="name">进行中活动</div>
+                            <p class="num" th:text="${onGoingActivityCount}">0</p>
+                        </div>
+                        <div class="mini-metric">
+                            <div class="name">音视频资源</div>
+                            <p class="num"><span th:text="${videoMediaCount}">0</span>/<span th:text="${audioMediaCount}">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-box">
+                <div class="panel-head">
+                    <h4>最近活动动态</h4>
+                    <a class="text-muted"
+                       shiro:hasPermission="portal:activity:view"
+                       href="javascript:void(0)"
+                       th:attr="data-url=@{/admin/portal/activity}"
+                       onclick="openPortalTab(this, '活动管理')">查看更多</a>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-clean" th:if="${latestActivities != null and !#lists.isEmpty(latestActivities)}">
+                        <li th:each="item : ${latestActivities}">
+                            <p class="list-title" th:text="${item.activityName}">活动名称</p>
+                            <div class="list-meta">
+                                <span>状态：<span th:text="${item.activityStatus == '1' ? '进行中' : (item.activityStatus == '2' ? '已结束' : '预热中')}">预热中</span></span>
+                                <span style="margin-left: 14px;" th:text="${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="empty-tip" th:if="${latestActivities == null or #lists.isEmpty(latestActivities)}">暂无活动数据</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    function openPortalTab(el, title) {
+        var url = el.getAttribute("data-url");
+        if (!url) {
+            return;
+        }
+        if (window.$ && window.$.modal && window.$.modal.openTab) {
+            window.$.modal.openTab(title, url);
+            return;
+        }
+        if (window.parent && window.parent.$ && window.parent.$.modal && window.parent.$.modal.openTab) {
+            window.parent.$.modal.openTab(title, url);
+            return;
+        }
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

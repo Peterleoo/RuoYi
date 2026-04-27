@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +26,20 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.portal.domain.PortalActivity;
+import com.ruoyi.portal.domain.PortalContent;
+import com.ruoyi.portal.domain.PortalCourse;
+import com.ruoyi.portal.domain.PortalMedia;
+import com.ruoyi.portal.domain.PortalMember;
+import com.ruoyi.portal.domain.PortalSchool;
+import com.ruoyi.portal.domain.PortalTeacher;
+import com.ruoyi.portal.service.IPortalActivityService;
+import com.ruoyi.portal.service.IPortalContentService;
+import com.ruoyi.portal.service.IPortalCourseService;
+import com.ruoyi.portal.service.IPortalMediaService;
+import com.ruoyi.portal.service.IPortalMemberService;
+import com.ruoyi.portal.service.IPortalSchoolService;
+import com.ruoyi.portal.service.IPortalTeacherService;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysMenuService;
 
@@ -43,6 +59,27 @@ public class SysIndexController extends BaseController
 
     @Autowired
     private SysPasswordService passwordService;
+
+    @Autowired
+    private IPortalSchoolService portalSchoolService;
+
+    @Autowired
+    private IPortalCourseService portalCourseService;
+
+    @Autowired
+    private IPortalTeacherService portalTeacherService;
+
+    @Autowired
+    private IPortalMemberService portalMemberService;
+
+    @Autowired
+    private IPortalContentService portalContentService;
+
+    @Autowired
+    private IPortalActivityService portalActivityService;
+
+    @Autowired
+    private IPortalMediaService portalMediaService;
 
     // 系统首页
     @GetMapping({ "/admin/index", "/index" })
@@ -133,8 +170,62 @@ public class SysIndexController extends BaseController
     @GetMapping({ "/admin/system/main", "/system/main" })
     public String main(ModelMap mmap)
     {
+        List<PortalSchool> schools = safeList(portalSchoolService.selectPortalSchoolList(new PortalSchool()));
+        List<PortalCourse> courses = safeList(portalCourseService.selectPortalCourseList(new PortalCourse()));
+        List<PortalTeacher> teachers = safeList(portalTeacherService.selectPortalTeacherList(new PortalTeacher()));
+        List<PortalMember> members = safeList(portalMemberService.selectPortalMemberList(new PortalMember()));
+        List<PortalContent> contents = safeList(portalContentService.selectPortalContentList(new PortalContent()));
+        List<PortalActivity> activities = safeList(portalActivityService.selectPortalActivityList(new PortalActivity()));
+        List<PortalMedia> medias = safeList(portalMediaService.selectPortalMediaList(new PortalMedia()));
+
+        mmap.put("schoolCount", schools.size());
+        mmap.put("courseCount", courses.size());
+        mmap.put("teacherCount", teachers.size());
+        mmap.put("memberCount", members.size());
+        mmap.put("contentCount", contents.size());
+        mmap.put("activityCount", activities.size());
+        mmap.put("mediaCount", medias.size());
+
+        mmap.put("activeSchoolCount", countByStatus(schools.stream().map(PortalSchool::getStatus).toList(), "0"));
+        mmap.put("activeCourseCount", countByStatus(courses.stream().map(PortalCourse::getStatus).toList(), "0"));
+        mmap.put("activeTeacherCount", countByStatus(teachers.stream().map(PortalTeacher::getStatus).toList(), "0"));
+        mmap.put("activeMemberCount", countByStatus(members.stream().map(PortalMember::getStatus).toList(), "0"));
+        mmap.put("pendingAuditCount", countByStatus(contents.stream().map(PortalContent::getAuditStatus).toList(), "0"));
+        mmap.put("onGoingActivityCount", countByStatus(activities.stream().map(PortalActivity::getActivityStatus).toList(), "1"));
+
+        long videoMediaCount = medias.stream().filter(m -> "video".equalsIgnoreCase(StringUtils.nvl(m.getMediaType(), ""))).count();
+        long audioMediaCount = medias.stream().filter(m -> "audio".equalsIgnoreCase(StringUtils.nvl(m.getMediaType(), ""))).count();
+        mmap.put("videoMediaCount", videoMediaCount);
+        mmap.put("audioMediaCount", audioMediaCount);
+
+        List<PortalContent> latestContents = new ArrayList<>(contents);
+        latestContents.sort(Comparator.comparing(PortalContent::getCreateTime, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (latestContents.size() > 6)
+        {
+            latestContents = latestContents.subList(0, 6);
+        }
+
+        List<PortalActivity> latestActivities = new ArrayList<>(activities);
+        latestActivities.sort(Comparator.comparing(PortalActivity::getCreateTime, Comparator.nullsLast(Comparator.reverseOrder())));
+        if (latestActivities.size() > 6)
+        {
+            latestActivities = latestActivities.subList(0, 6);
+        }
+
+        mmap.put("latestContents", latestContents);
+        mmap.put("latestActivities", latestActivities);
         mmap.put("version", RuoYiConfig.getVersion());
-        return "main";
+        return "main_portal";
+    }
+
+    private <T> List<T> safeList(List<T> list)
+    {
+        return list == null ? new ArrayList<>() : list;
+    }
+
+    private long countByStatus(List<String> statusList, String target)
+    {
+        return statusList.stream().filter(s -> target.equals(StringUtils.nvl(s, ""))).count();
     }
 
     // content-main class

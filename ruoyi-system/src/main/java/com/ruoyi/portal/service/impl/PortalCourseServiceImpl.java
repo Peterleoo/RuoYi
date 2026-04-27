@@ -1,5 +1,7 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalCourse;
 import com.ruoyi.portal.mapper.PortalCourseMapper;
 import com.ruoyi.portal.service.IPortalCourseService;
@@ -21,6 +23,7 @@ public class PortalCourseServiceImpl implements IPortalCourseService {
     }
 
     @Override
+    @DataScope(deptAlias = "s", userAlias = "c", userField = "creator_id")
     public List<PortalCourse> selectPortalCourseList(PortalCourse portalCourse) {
         return portalCourseMapper.selectPortalCourseList(portalCourse);
     }
@@ -33,12 +36,16 @@ public class PortalCourseServiceImpl implements IPortalCourseService {
     @Override
     public int insertPortalCourse(PortalCourse portalCourse) {
         portalCourse.setCreateTime(new Date());
+        portalCourse.setCreatorId(ShiroUtils.getUserId());
+        portalCourse.setCreateBy(ShiroUtils.getLoginName());
         return portalCourseMapper.insertPortalCourse(portalCourse);
     }
 
     @Override
     public int updatePortalCourse(PortalCourse portalCourse) {
         portalCourse.setUpdateTime(new Date());
+        portalCourse.setUpdaterId(ShiroUtils.getUserId());
+        portalCourse.setUpdateBy(ShiroUtils.getLoginName());
         return portalCourseMapper.updatePortalCourse(portalCourse);
     }
 
@@ -52,4 +59,3 @@ public class PortalCourseServiceImpl implements IPortalCourseService {
         return portalCourseMapper.deletePortalCourseByIds(courseIds);
     }
 }
-

@@ -1,5 +1,6 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalContent;
@@ -20,6 +21,7 @@ public class PortalContentServiceImpl implements IPortalContentService {
     private PortalContentMapper portalContentMapper;
 
     @Override
+    @DataScope(deptAlias = "s", userAlias = "c", userField = "creator_id")
     public List<PortalContent> selectPortalContentList(PortalContent portalContent) {
         return portalContentMapper.selectPortalContentList(portalContent);
     }
@@ -27,17 +29,16 @@ public class PortalContentServiceImpl implements IPortalContentService {
     @Override
     public int insertPortalContent(PortalContent portalContent) {
         portalContent.setCreateTime(DateUtils.getNowDate());
-        // 注意：PortalContent 的 createBy 是 Long 类型，但 ShiroUtils.getLoginName() 是 String
-        // 如果数据库是 Long，通常存储的是 userId。我们需要确认 createBy 的类型。
-        // 根据之前的代码，PortalContent.createBy 是 Long。
-        portalContent.setCreateBy(ShiroUtils.getUserId());
+        portalContent.setCreatorId(ShiroUtils.getUserId());
+        portalContent.setCreateBy(ShiroUtils.getLoginName());
         return portalContentMapper.insertPortalContent(portalContent);
     }
 
     @Override
     public int updatePortalContent(PortalContent portalContent) {
         portalContent.setUpdateTime(DateUtils.getNowDate());
-        portalContent.setUpdateBy(ShiroUtils.getUserId());
+        portalContent.setUpdaterId(ShiroUtils.getUserId());
+        portalContent.setUpdateBy(ShiroUtils.getLoginName());
         return portalContentMapper.updatePortalContent(portalContent);
     }
 

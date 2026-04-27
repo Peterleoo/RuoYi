@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,117 +55,24 @@
         </div>
     </section>
 
-    <!-- 内容分类导航 -->
-    <section class="content-nav">
-        <div class="container">
-            <ul class="nav-tabs">
-                <li><a href="#policy">政策解读</a></li>
-                <li><a href="#news">老龄新闻</a></li>
-                <li><a href="#health">健康科普</a></li>
-                <li><a href="#culture">文化娱乐</a></li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- 政策解读 -->
-    <section id="policy" class="content-section">
+    <!-- 动态资讯列表 -->
+    <section class="content-section">
         <div class="container">
             <div class="card">
-                <h3 class="card-title">政策解读</h3>
-                <div class="news-list">
-                    <div class="news-item">
-                        <h4><a href="#">国务院办公厅关于推进养老服务发展的意见解读</a></h4>
-                        <p class="date">2024-04-15</p>
-                        <p class="summary">本文对国务院办公厅发布的《关于推进养老服务发展的意见》进行详细解读，分析政策背景、主要内容和实施意义。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">湖南省老年人优待办法实施细则解读</a></h4>
-                        <p class="date">2024-04-10</p>
-                        <p class="summary">详细解读湖南省老年人优待办法实施细则，包括老年人在医疗、交通、旅游等方面享受的优惠政策。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">老干部大学发展专项资金管理办法解读</a></h4>
-                        <p class="date">2024-04-05</p>
-                        <p class="summary">解读老干部大学发展专项资金管理办法，包括资金使用范围、申请流程和监督管理等内容。</p>
+                <h3 class="card-title">资讯列表</h3>
+                <div class="news-list" th:if="${!#lists.isEmpty(articles)}">
+                    <div class="news-item" th:each="article : ${articles}">
+                        <h4><a th:href="@{'/portal/news/' + ${article.contentId}}" th:text="${article.title}">文章标题</a></h4>
+                        <p class="date">
+                            <span th:text="${article.publishTime != null ? #dates.format(article.publishTime,'yyyy-MM-dd HH:mm') : '未发布'}">未发布</span>
+                            <span style="margin-left: 12px;" th:text="'阅读 ' + (${article.viewCount} ?: 0)">阅读 0</span>
+                        </p>
+                        <p class="summary" th:text="${article.summary} ?: '暂无摘要'">暂无摘要</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 老龄新闻 -->
-    <section id="news" class="content-section">
-        <div class="container">
-            <div class="card">
-                <h3 class="card-title">老龄新闻</h3>
-                <div class="news-list">
-                    <div class="news-item">
-                        <h4><a href="#">湖南省举办2024年老年人文化艺术节</a></h4>
-                        <p class="date">2024-04-18</p>
-                        <p class="summary">湖南省举办2024年老年人文化艺术节，来自全省各地的老年朋友展示了丰富多彩的文艺节目。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">长沙市老干部大学新校区正式启用</a></h4>
-                        <p class="date">2024-04-12</p>
-                        <p class="summary">长沙市老干部大学新校区正式启用，新校区设施齐全，环境优美，为老年学员提供更好的学习环境。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">湖南省启动老年人智能技术应用能力提升行动</a></h4>
-                        <p class="date">2024-04-08</p>
-                        <p class="summary">湖南省启动老年人智能技术应用能力提升行动，帮助老年人更好地适应数字时代。</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 健康科普 -->
-    <section id="health" class="content-section">
-        <div class="container">
-            <div class="card">
-                <h3 class="card-title">健康科普</h3>
-                <div class="news-list">
-                    <div class="news-item">
-                        <h4><a href="#">老年人春季养生指南</a></h4>
-                        <p class="date">2024-04-20</p>
-                        <p class="summary">春季是养生的好时节，本文为老年人提供春季养生的实用建议，包括饮食、运动和生活习惯等方面。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">老年人常见慢性病的预防与管理</a></h4>
-                        <p class="date">2024-04-16</p>
-                        <p class="summary">介绍老年人常见慢性病的预防与管理方法，帮助老年人提高健康意识，做好自我保健。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">老年人心理健康的重要性及维护方法</a></h4>
-                        <p class="date">2024-04-11</p>
-                        <p class="summary">探讨老年人心理健康的重要性，提供维护心理健康的有效方法，帮助老年人保持积极乐观的心态。</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 文化娱乐 -->
-    <section id="culture" class="content-section">
-        <div class="container">
-            <div class="card">
-                <h3 class="card-title">文化娱乐</h3>
-                <div class="news-list">
-                    <div class="news-item">
-                        <h4><a href="#">老年人书法作品赏析</a></h4>
-                        <p class="date">2024-04-19</p>
-                        <p class="summary">赏析湖南省老年人书法作品，展示老年人的艺术才华和精神风貌。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">老年人旅游攻略：春季适合老年人的旅游目的地</a></h4>
-                        <p class="date">2024-04-14</p>
-                        <p class="summary">为老年人提供春季旅游攻略，推荐适合老年人的旅游目的地和注意事项。</p>
-                    </div>
-                    <div class="news-item">
-                        <h4><a href="#">老年人棋牌活动的益处及技巧</a></h4>
-                        <p class="date">2024-04-09</p>
-                        <p class="summary">介绍老年人参与棋牌活动的益处，提供一些棋牌游戏的技巧和注意事项。</p>
-                    </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(articles)}">
+                    <h5>暂无资讯内容</h5>
+                    <p>请先在后台“内容管理”中发布并审核通过文章。</p>
                 </div>
             </div>
         </div>
@@ -217,32 +124,5 @@
     <!-- 字体控制脚本 -->
     <script src="/portal/js/font-control.js"></script>
     <script src="/portal/js/a11y.js"></script>
-    <script>
-        // 标签页切换功能
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.nav-tabs li a');
-            const sections = document.querySelectorAll('.content-section');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 移除所有标签页的活跃状态
-                    tabs.forEach(t => t.parentElement.classList.remove('active'));
-                    // 添加当前标签页的活跃状态
-                    this.parentElement.classList.add('active');
-                    
-                    // 隐藏所有内容区域
-                    sections.forEach(section => section.style.display = 'none');
-                    // 显示对应内容区域
-                    const targetId = this.getAttribute('href');
-                    document.querySelector(targetId).style.display = 'block';
-                });
-            });
-            
-            // 默认显示第一个标签页
-            tabs[0].click();
-        });
-    </script>
 </body>
 </html>

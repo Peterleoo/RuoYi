@@ -18,39 +18,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="enrollmentBrochure" column="enrollment_brochure"/>
         <result property="coverImage" column="cover_image"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectPortalSchoolVo">
-        select school_id, dept_id, school_name, logo, introduction, address, longitude, latitude,
-               contact_phone, transport_guide, enrollment_brochure, cover_image, status, create_by,
-               create_time, update_by, update_time, remark
-        from portal_school
+        select ps.school_id, ps.dept_id, ps.school_name, ps.logo, ps.introduction, ps.address, ps.longitude, ps.latitude,
+               ps.contact_phone, ps.transport_guide, ps.enrollment_brochure, ps.cover_image, ps.status, ps.creator_id,
+               ps.create_by, ps.create_time, ps.updater_id, ps.update_by, ps.update_time, ps.remark
+        from portal_school ps
     </sql>
 
     <select id="selectPortalSchoolById" parameterType="Long" resultMap="PortalSchoolResult">
         <include refid="selectPortalSchoolVo"/>
-        where school_id = #{schoolId}
+        where ps.school_id = #{schoolId}
     </select>
 
     <select id="selectPortalSchoolList" parameterType="com.ruoyi.portal.domain.PortalSchool" resultMap="PortalSchoolResult">
         <include refid="selectPortalSchoolVo"/>
         <where>
             <if test="schoolName != null and schoolName != ''">
-                and school_name like concat('%', #{schoolName}, '%')
+                and ps.school_name like concat('%', #{schoolName}, '%')
             </if>
             <if test="deptId != null">
-                and dept_id = #{deptId}
+                and ps.dept_id = #{deptId}
             </if>
             <if test="status != null and status != ''">
-                and status = #{status}
+                and ps.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
-        order by school_id desc
+        order by ps.school_id desc
     </select>
 
     <insert id="insertPortalSchool" parameterType="com.ruoyi.portal.domain.PortalSchool" useGeneratedKeys="true" keyProperty="schoolId">
@@ -68,8 +71,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enrollmentBrochure != null">enrollment_brochure,</if>
             <if test="coverImage != null">cover_image,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -87,8 +92,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enrollmentBrochure != null">#{enrollmentBrochure},</if>
             <if test="coverImage != null">#{coverImage},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -110,6 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enrollmentBrochure != null">enrollment_brochure = #{enrollmentBrochure},</if>
             <if test="coverImage != null">cover_image = #{coverImage},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
@@ -129,4 +137,3 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
 </mapper>
-

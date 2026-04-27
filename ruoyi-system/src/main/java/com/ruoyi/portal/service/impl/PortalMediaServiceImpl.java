@@ -1,5 +1,6 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalMedia;
@@ -22,6 +23,7 @@ public class PortalMediaServiceImpl implements IPortalMediaService {
     }
 
     @Override
+    @DataScope(deptAlias = "su", userAlias = "m", userField = "creator_id")
     public List<PortalMedia> selectPortalMediaList(PortalMedia portalMedia) {
         return portalMediaMapper.selectPortalMediaList(portalMedia);
     }
@@ -29,6 +31,7 @@ public class PortalMediaServiceImpl implements IPortalMediaService {
     @Override
     public int insertPortalMedia(PortalMedia portalMedia) {
         portalMedia.setCreateTime(DateUtils.getNowDate());
+        portalMedia.setCreatorId(ShiroUtils.getUserId());
         portalMedia.setCreateBy(ShiroUtils.getLoginName());
         return portalMediaMapper.insertPortalMedia(portalMedia);
     }
@@ -36,6 +39,7 @@ public class PortalMediaServiceImpl implements IPortalMediaService {
     @Override
     public int updatePortalMedia(PortalMedia portalMedia) {
         portalMedia.setUpdateTime(DateUtils.getNowDate());
+        portalMedia.setUpdaterId(ShiroUtils.getUserId());
         portalMedia.setUpdateBy(ShiroUtils.getLoginName());
         return portalMediaMapper.updatePortalMedia(portalMedia);
     }

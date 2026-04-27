@@ -13,44 +13,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="expertise" column="expertise"/>
         <result property="bio" column="bio"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectPortalTeacherVo">
-        select teacher_id, school_id, teacher_name, photo, title, expertise, bio, status,
-               create_by, create_time, update_by, update_time, remark
-        from portal_teacher
+        select t.teacher_id, t.school_id, t.teacher_name, t.photo, t.title, t.expertise, t.bio, t.status,
+               t.creator_id, t.create_by, t.create_time, t.updater_id, t.update_by, t.update_time, t.remark
+        from portal_teacher t
+        left join portal_school s on t.school_id = s.school_id
     </sql>
 
     <select id="selectPortalTeacherById" parameterType="Long" resultMap="PortalTeacherResult">
         <include refid="selectPortalTeacherVo"/>
-        where teacher_id = #{teacherId}
+        where t.teacher_id = #{teacherId}
     </select>
 
     <select id="selectPortalTeacherList" parameterType="com.ruoyi.portal.domain.PortalTeacher" resultMap="PortalTeacherResult">
         <include refid="selectPortalTeacherVo"/>
         <where>
             <if test="schoolId != null">
-                and school_id = #{schoolId}
+                and t.school_id = #{schoolId}
             </if>
             <if test="teacherName != null and teacherName != ''">
-                and teacher_name like concat('%', #{teacherName}, '%')
+                and t.teacher_name like concat('%', #{teacherName}, '%')
             </if>
             <if test="status != null and status != ''">
-                and status = #{status}
+                and t.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
-        order by teacher_id desc
+        order by t.teacher_id desc
     </select>
 
     <select id="selectPortalTeacherBySchoolId" parameterType="Long" resultMap="PortalTeacherResult">
         <include refid="selectPortalTeacherVo"/>
-        where school_id = #{schoolId}
-        order by teacher_id desc
+        where t.school_id = #{schoolId}
+        order by t.teacher_id desc
     </select>
 
     <insert id="insertPortalTeacher" parameterType="com.ruoyi.portal.domain.PortalTeacher" useGeneratedKeys="true" keyProperty="teacherId">
@@ -63,8 +67,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertise != null">expertise,</if>
             <if test="bio != null">bio,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -77,8 +83,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertise != null">#{expertise},</if>
             <if test="bio != null">#{bio},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -95,6 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertise != null">expertise = #{expertise},</if>
             <if test="bio != null">bio = #{bio},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,6 +96,34 @@
         </div>
     </section>
 
+    <!-- 期刊列表 -->
+    <section class="content-section">
+        <div class="container">
+            <div class="card">
+                <h3 class="card-title">最新期刊</h3>
+                <div class="news-list" th:if="${!#lists.isEmpty(magazines)}">
+                    <div class="news-item" th:each="magazine : ${magazines}">
+                        <h4 th:text="${magazine.magazineTitle}">杂志标题</h4>
+                        <p class="date">
+                            <span th:text="'期号：' + (${magazine.magazineIssue} ?: '未设置')">期号：未设置</span>
+                            <span style="margin-left:12px;" th:text="'年份：' + (${magazine.publishYear} ?: '--')">年份：--</span>
+                            <span style="margin-left:12px;" th:text="${magazine.publishDate != null ? #dates.format(magazine.publishDate,'yyyy-MM-dd') : '未发布'}">未发布</span>
+                        </p>
+                        <p class="summary" th:text="${magazine.introduction} ?: '暂无简介'">暂无简介</p>
+                        <p>
+                            <a class="btn btn-primary" th:if="${magazine.magazinePdf != null and magazine.magazinePdf != ''}" th:href="${magazine.magazinePdf}" target="_blank">阅读PDF</a>
+                            <a class="btn btn-primary" style="margin-left:8px;" th:if="${magazine.h5Url != null and magazine.h5Url != ''}" th:href="${magazine.h5Url}" target="_blank">H5阅读</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="empty-state" th:if="${#lists.isEmpty(magazines)}">
+                    <h5>暂无杂志数据</h5>
+                    <p>请先在后台“杂志管理”中发布期刊。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 在线阅读 -->
     <section class="online-reading">
         <div class="container">
@@ -103,7 +131,7 @@
                 <h3 class="card-title">在线阅读</h3>
                 <div class="reading-content">
                     <p>点击下方链接进入电子杂志阅读平台：</p>
-                    <a href="#" class="btn btn-primary">电子杂志阅读</a>
+                    <a href="/portal/news" class="btn btn-primary">进入资讯中心</a>
                 </div>
             </div>
         </div>
@@ -115,15 +143,17 @@
             <div class="card">
                 <h3 class="card-title">多媒体内容</h3>
                 <div class="multimedia-content">
-                    <div class="media-item">
-                        <h4>音频杂志</h4>
-                        <p>适合视力不佳的读者，点击下方链接收听：</p>
-                        <a href="#" class="btn btn-primary">音频杂志</a>
+                    <div class="media-item" th:each="media : ${mediaList}">
+                        <h4 th:text="${media.title}">多媒体标题</h4>
+                        <p>
+                            <span th:text="${media.mediaType == '1' ? '音频资源' : '视频资源'}">资源类型</span>
+                            <span th:if="${media.duration != null and media.duration != ''}" th:text="${' · 时长：' + media.duration}"> · 时长</span>
+                        </p>
+                        <a th:href="${media.mediaUrl}" class="btn btn-primary" target="_blank">立即查看</a>
                     </div>
-                    <div class="media-item">
-                        <h4>视频栏目</h4>
-                        <p>养生课堂、人物访谈等视频内容：</p>
-                        <a href="#" class="btn btn-primary">视频栏目</a>
+                    <div class="empty-state" th:if="${#lists.isEmpty(mediaList)}">
+                        <h5>暂无多媒体资源</h5>
+                        <p>请在后台“多媒体资源”中补充音视频内容。</p>
                     </div>
                 </div>
             </div>

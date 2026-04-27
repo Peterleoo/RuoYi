@@ -134,31 +134,13 @@
     $("#form-activity-edit").validate({ focusCleanup: true });
     function submitHandler() {
         if ($.validate.form()) {
-            $("#activityContentInput").val($('.summernote').summernote('code'));
-            var formData = new FormData(document.getElementById("form-activity-edit"));
-            $.ajax({
-                url: prefix + "/edit",
-                type: "post",
-                dataType: "json",
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function(xhr, settings) {
-                    var csrftoken = $('meta[name=csrf-token]').attr('content');
-                    if ($.common.equalsIgnoreCase(settings.type, "POST")) {
-                        xhr.setRequestHeader("X-CSRF-Token", csrftoken);
-                    }
-                    $.modal.loading("正在处理中，请稍候...");
-                    $.modal.disable();
-                },
-                success: function(result) {
-                    $.operate.successCallback(result);
-                },
-                error: function() {
-                    $.modal.closeLoading();
-                    $.modal.alertError("提交失败，请重试");
-                }
-            });
+            var html = $('.summernote').summernote('code');
+            if (html && html.indexOf("data:image/") !== -1) {
+                $.modal.alertError("检测到Base64图片，请先用上传按钮上传图片再提交");
+                return;
+            }
+            $("#activityContentInput").val(html);
+            $.operate.save(prefix + "/edit", $('#form-activity-edit').serialize());
         }
     }
 </script>

@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 学校/机构对象 portal_school
@@ -26,11 +28,14 @@ public class PortalSchool implements Serializable {
     private String enrollmentBrochure;
     private String coverImage;
     private String status;
+    private Long creatorId;
     private String createBy;
     private Date createTime;
+    private Long updaterId;
     private String updateBy;
     private Date updateTime;
     private String remark;
+    private Map<String, Object> params;
 
     public Long getSchoolId() {
         return schoolId;
@@ -144,6 +149,14 @@ public class PortalSchool implements Serializable {
         this.createBy = createBy;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -158,6 +171,14 @@ public class PortalSchool implements Serializable {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
     }
 
     public Date getUpdateTime() {
@@ -176,6 +197,17 @@ public class PortalSchool implements Serializable {
         this.remark = remark;
     }
 
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -192,12 +224,13 @@ public class PortalSchool implements Serializable {
                 .append("enrollmentBrochure", enrollmentBrochure)
                 .append("coverImage", coverImage)
                 .append("status", status)
+                .append("creatorId", creatorId)
                 .append("createBy", createBy)
                 .append("createTime", createTime)
+                .append("updaterId", updaterId)
                 .append("updateBy", updateBy)
                 .append("updateTime", updateTime)
                 .append("remark", remark)
                 .toString();
     }
 }
-

@@ -1,5 +1,6 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalMagazine;
@@ -36,6 +37,7 @@ public class PortalMagazineServiceImpl implements IPortalMagazineService {
      * @return 杂志管理集合
      */
     @Override
+    @DataScope(deptAlias = "su", userAlias = "m", userField = "creator_id")
     public List<PortalMagazine> selectPortalMagazineList(PortalMagazine portalMagazine) {
         return portalMagazineMapper.selectPortalMagazineList(portalMagazine);
     }
@@ -49,6 +51,7 @@ public class PortalMagazineServiceImpl implements IPortalMagazineService {
     @Override
     public int insertPortalMagazine(PortalMagazine portalMagazine) {
         portalMagazine.setCreateTime(DateUtils.getNowDate());
+        portalMagazine.setCreatorId(ShiroUtils.getUserId());
         portalMagazine.setCreateBy(ShiroUtils.getLoginName());
         return portalMagazineMapper.insertPortalMagazine(portalMagazine);
     }
@@ -62,6 +65,7 @@ public class PortalMagazineServiceImpl implements IPortalMagazineService {
     @Override
     public int updatePortalMagazine(PortalMagazine portalMagazine) {
         portalMagazine.setUpdateTime(DateUtils.getNowDate());
+        portalMagazine.setUpdaterId(ShiroUtils.getUserId());
         portalMagazine.setUpdateBy(ShiroUtils.getLoginName());
         return portalMagazineMapper.updatePortalMagazine(portalMagazine);
     }

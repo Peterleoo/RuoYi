@@ -2,6 +2,8 @@ package com.ruoyi.portal.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 多媒体资源对象 portal_media
@@ -18,13 +20,16 @@ public class PortalMedia implements Serializable {
     private Long articleId;
     private Long courseId;
     private String status;
+    private Long creatorId;
     private String createBy;
     private Date createTime;
+    private Long updaterId;
     private String updateBy;
     private Date updateTime;
     private String remark;
     private String articleTitle;
     private String courseName;
+    private Map<String, Object> params;
 
     public Long getMediaId() {
         return mediaId;
@@ -106,6 +111,14 @@ public class PortalMedia implements Serializable {
         this.createBy = createBy;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -120,6 +133,14 @@ public class PortalMedia implements Serializable {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
     }
 
     public Date getUpdateTime() {
@@ -152,5 +173,16 @@ public class PortalMedia implements Serializable {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +14,23 @@
     <div class="container">
         <div class="card">
             <h3 class="card-title">活动中心</h3>
-            <p>活动报名功能建设中，敬请期待。</p>
-            <p><a class="btn btn-primary" href="/portal/member">前往会员中心</a></p>
+            <div class="news-list" th:if="${!#lists.isEmpty(activities)}">
+                <div class="news-item" th:each="activity : ${activities}">
+                    <h4 th:text="${activity.activityName}">活动名称</h4>
+                    <p class="date">
+                        <span th:text="'状态：' + (activity.activityStatus == '0' ? '预热中' : (activity.activityStatus == '1' ? '进行中' : '已结束'))">状态：预热中</span>
+                        <span style="margin-left:12px;" th:text="${activity.startTime != null ? #dates.format(activity.startTime,'yyyy-MM-dd HH:mm') : '未设置时间'}">未设置时间</span>
+                    </p>
+                    <p class="summary" th:text="${activity.activityContent} ?: '暂无活动详情'">暂无活动详情</p>
+                    <p>地点：<span th:text="${activity.location} ?: '待定'">待定</span></p>
+                    <p>报名：<span th:text="${activity.currentRegistrations} ?: 0">0</span>/<span th:text="${activity.capacity} ?: 0">0</span></p>
+                </div>
+            </div>
+            <div class="empty-state" th:if="${#lists.isEmpty(activities)}">
+                <h5>暂无活动信息</h5>
+                <p>请在后台“活动管理”中新增并发布活动。</p>
+            </div>
+            <p style="margin-top:16px;"><a class="btn btn-primary" href="/portal/member">前往会员中心报名</a></p>
         </div>
     </div>
 </section>

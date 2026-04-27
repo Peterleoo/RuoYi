@@ -1,5 +1,7 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalTeacher;
 import com.ruoyi.portal.mapper.PortalTeacherMapper;
 import com.ruoyi.portal.service.IPortalTeacherService;
@@ -21,6 +23,7 @@ public class PortalTeacherServiceImpl implements IPortalTeacherService {
     }
 
     @Override
+    @DataScope(deptAlias = "s", userAlias = "t", userField = "creator_id")
     public List<PortalTeacher> selectPortalTeacherList(PortalTeacher portalTeacher) {
         return portalTeacherMapper.selectPortalTeacherList(portalTeacher);
     }
@@ -33,12 +36,16 @@ public class PortalTeacherServiceImpl implements IPortalTeacherService {
     @Override
     public int insertPortalTeacher(PortalTeacher portalTeacher) {
         portalTeacher.setCreateTime(new Date());
+        portalTeacher.setCreatorId(ShiroUtils.getUserId());
+        portalTeacher.setCreateBy(ShiroUtils.getLoginName());
         return portalTeacherMapper.insertPortalTeacher(portalTeacher);
     }
 
     @Override
     public int updatePortalTeacher(PortalTeacher portalTeacher) {
         portalTeacher.setUpdateTime(new Date());
+        portalTeacher.setUpdaterId(ShiroUtils.getUserId());
+        portalTeacher.setUpdateBy(ShiroUtils.getLoginName());
         return portalTeacherMapper.updatePortalTeacher(portalTeacher);
     }
 
@@ -52,4 +59,3 @@ public class PortalTeacherServiceImpl implements IPortalTeacherService {
         return portalTeacherMapper.deletePortalTeacherByIds(teacherIds);
     }
 }
-

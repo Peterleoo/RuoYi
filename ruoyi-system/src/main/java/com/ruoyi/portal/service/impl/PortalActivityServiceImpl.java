@@ -1,5 +1,6 @@
 package com.ruoyi.portal.service.impl;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.portal.domain.PortalActivity;
@@ -22,6 +23,7 @@ public class PortalActivityServiceImpl implements IPortalActivityService {
     }
 
     @Override
+    @DataScope(deptAlias = "s", userAlias = "a", userField = "creator_id")
     public List<PortalActivity> selectPortalActivityList(PortalActivity portalActivity) {
         return portalActivityMapper.selectPortalActivityList(portalActivity);
     }
@@ -29,6 +31,7 @@ public class PortalActivityServiceImpl implements IPortalActivityService {
     @Override
     public int insertPortalActivity(PortalActivity portalActivity) {
         portalActivity.setCreateTime(DateUtils.getNowDate());
+        portalActivity.setCreatorId(ShiroUtils.getUserId());
         portalActivity.setCreateBy(ShiroUtils.getLoginName());
         return portalActivityMapper.insertPortalActivity(portalActivity);
     }
@@ -36,6 +39,7 @@ public class PortalActivityServiceImpl implements IPortalActivityService {
     @Override
     public int updatePortalActivity(PortalActivity portalActivity) {
         portalActivity.setUpdateTime(DateUtils.getNowDate());
+        portalActivity.setUpdaterId(ShiroUtils.getUserId());
         portalActivity.setUpdateBy(ShiroUtils.getLoginName());
         return portalActivityMapper.updatePortalActivity(portalActivity);
     }

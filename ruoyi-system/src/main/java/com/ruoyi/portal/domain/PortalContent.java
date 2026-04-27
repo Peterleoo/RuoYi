@@ -1,6 +1,8 @@
 package com.ruoyi.portal.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -23,9 +25,11 @@ public class PortalContent {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date publishTime;
     private String status;
-    private Long createBy;
+    private Long creatorId;
+    private String createBy;
     private Date createTime;
-    private Long updateBy;
+    private Long updaterId;
+    private String updateBy;
     private Date updateTime;
     private String remark;
     private String mediaType; // 媒体类型：video, audio, pdf, text
@@ -33,6 +37,7 @@ public class PortalContent {
     private String mediaDuration; // 媒体时长（用于视频和音频）
     private String mediaSize; // 媒体文件大小
     private String schoolName;
+    private Map<String, Object> params;
 
     // getters and setters
     public Long getContentId() {
@@ -155,12 +160,20 @@ public class PortalContent {
         this.status = status;
     }
 
-    public Long getCreateBy() {
+    public String getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(Long createBy) {
+    public void setCreateBy(String createBy) {
         this.createBy = createBy;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
     }
 
     public Date getCreateTime() {
@@ -171,12 +184,20 @@ public class PortalContent {
         this.createTime = createTime;
     }
 
-    public Long getUpdateBy() {
+    public String getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(Long updateBy) {
+    public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
     }
 
     public Date getUpdateTime() {
@@ -233,5 +254,16 @@ public class PortalContent {
 
     public void setSchoolName(String schoolName) {
         this.schoolName = schoolName;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

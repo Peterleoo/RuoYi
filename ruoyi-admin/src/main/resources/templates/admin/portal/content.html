@@ -50,6 +50,9 @@
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="portal:content:add">
                     <i class="fa fa-plus"></i> 新增
                 </a>
+                <a class="btn btn-info" th:href="@{/admin/portal/content/category}" shiro:hasPermission="portal:contentCategory:view">
+                    <i class="fa fa-tags"></i> 分类管理
+                </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="portal:content:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>

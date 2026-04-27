@@ -2,6 +2,8 @@ package com.ruoyi.portal.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -27,12 +29,15 @@ public class PortalActivity implements Serializable {
     private Integer currentRegistrations;
     private String activityStatus;
     private String status;
+    private Long creatorId;
     private String createBy;
     private Date createTime;
+    private Long updaterId;
     private String updateBy;
     private Date updateTime;
     private String remark;
     private String schoolName;
+    private Map<String, Object> params;
 
     public Long getActivityId() {
         return activityId;
@@ -154,6 +159,14 @@ public class PortalActivity implements Serializable {
         this.createBy = createBy;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -168,6 +181,14 @@ public class PortalActivity implements Serializable {
 
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
     }
 
     public Date getUpdateTime() {
@@ -192,5 +213,16 @@ public class PortalActivity implements Serializable {
 
     public void setSchoolName(String schoolName) {
         this.schoolName = schoolName;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

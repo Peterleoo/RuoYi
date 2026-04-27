@@ -6,14 +6,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Force Tomcat to use NIO2 protocol to avoid selector loopback issues on some Windows environments.
+ * Tomcat 全局配置
+ * 配置 Tomcat 连接器以允许特殊字符,解决 "Invalid chunk" 错误
  */
 @Configuration
-public class TomcatProtocolConfig
-{
+public class TomcatProtocolConfig {
+
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatProtocolCustomizer()
-    {
-        return factory -> factory.setProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomizer() {
+        return factory -> {
+            factory.setProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
+
+            factory.addConnectorCustomizers(connector -> {
+                // 允许在 URL 路径中使用特殊字符
+                connector.setProperty("relaxedPathChars", "\"<>[\\]^`{|}");
+                // 允许在查询参数中使用特殊字符(包括 =)
+                connector.setProperty("relaxedQueryChars", "\"<>[\\]^`{|}=");
+            });
+        };
     }
 }

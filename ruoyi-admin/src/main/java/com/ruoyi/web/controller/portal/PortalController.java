@@ -1,9 +1,17 @@
 package com.ruoyi.web.controller.portal;
 
 import com.ruoyi.portal.domain.PortalCourse;
+import com.ruoyi.portal.domain.PortalContent;
+import com.ruoyi.portal.domain.PortalMagazine;
+import com.ruoyi.portal.domain.PortalMedia;
+import com.ruoyi.portal.domain.PortalActivity;
 import com.ruoyi.portal.domain.PortalSchool;
 import com.ruoyi.portal.domain.PortalTeacher;
 import com.ruoyi.portal.service.IPortalCourseService;
+import com.ruoyi.portal.service.IPortalContentService;
+import com.ruoyi.portal.service.IPortalMagazineService;
+import com.ruoyi.portal.service.IPortalMediaService;
+import com.ruoyi.portal.service.IPortalActivityService;
 import com.ruoyi.portal.service.IPortalSchoolService;
 import com.ruoyi.portal.service.IPortalTeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +40,18 @@ public class PortalController {
     @Autowired
     private IPortalCourseService portalCourseService;
 
+    @Autowired
+    private IPortalContentService portalContentService;
+
+    @Autowired
+    private IPortalMagazineService portalMagazineService;
+
+    @Autowired
+    private IPortalMediaService portalMediaService;
+
+    @Autowired
+    private IPortalActivityService portalActivityService;
+
     /**
      * 根路径 - 直接跳转到官网首页
      */
@@ -44,7 +64,24 @@ public class PortalController {
      * 首页
      */
     @GetMapping("index")
-    public String index() {
+    public String index(ModelMap mmap) {
+        PortalCourse courseQuery = new PortalCourse();
+        courseQuery.setStatus("0");
+        List<PortalCourse> courses = portalCourseService.selectPortalCourseList(courseQuery);
+
+        PortalActivity activityQuery = new PortalActivity();
+        activityQuery.setStatus("0");
+        List<PortalActivity> activities = portalActivityService.selectPortalActivityList(activityQuery);
+
+        PortalContent contentQuery = new PortalContent();
+        contentQuery.setStatus("0");
+        contentQuery.setAuditStatus("1");
+        List<PortalContent> articles = portalContentService.selectPortalContentList(contentQuery);
+
+        mmap.put("hotCourses", limitList(courses, 4));
+        mmap.put("miniCourses", limitList(courses, 4));
+        mmap.put("upcomingActivities", limitList(activities, 5));
+        mmap.put("popularArticles", limitList(articles, 5));
         return "portal/index";
     }
 
@@ -52,7 +89,17 @@ public class PortalController {
      * 杂志天地
      */
     @GetMapping("magazine")
-    public String magazine() {
+    public String magazine(ModelMap mmap) {
+        PortalMagazine magazineQuery = new PortalMagazine();
+        magazineQuery.setStatus("0");
+        List<PortalMagazine> magazines = portalMagazineService.selectPortalMagazineList(magazineQuery);
+
+        PortalMedia mediaQuery = new PortalMedia();
+        mediaQuery.setStatus("0");
+        List<PortalMedia> mediaList = portalMediaService.selectPortalMediaList(mediaQuery);
+
+        mmap.put("magazines", magazines);
+        mmap.put("mediaList", limitList(mediaList, 8));
         return "portal/magazine";
     }
 
@@ -97,8 +144,29 @@ public class PortalController {
      * 银龄动态
      */
     @GetMapping("news")
-    public String news() {
+    public String news(ModelMap mmap) {
+        PortalContent query = new PortalContent();
+        query.setStatus("0");
+        query.setAuditStatus("1");
+        mmap.put("articles", portalContentService.selectPortalContentList(query));
         return "portal/news";
+    }
+
+    /**
+     * 银龄动态详情
+     */
+    @GetMapping("news/{id}")
+    public String newsDetail(@PathVariable("id") Long id, ModelMap mmap) {
+        PortalContent article = portalContentService.selectPortalContentById(id);
+        if (article == null || !"0".equals(article.getStatus())) {
+            return "redirect:/portal/news";
+        }
+        PortalContent query = new PortalContent();
+        query.setStatus("0");
+        query.setAuditStatus("1");
+        mmap.put("article", article);
+        mmap.put("latestArticles", limitList(portalContentService.selectPortalContentList(query), 8));
+        return "portal/news-detail";
     }
 
     /**
@@ -140,7 +208,10 @@ public class PortalController {
      * 活动报名
      */
     @GetMapping("activity")
-    public String activity() {
+    public String activity(ModelMap mmap) {
+        PortalActivity query = new PortalActivity();
+        query.setStatus("0");
+        mmap.put("activities", portalActivityService.selectPortalActivityList(query));
         return "portal/activity";
     }
 
@@ -158,5 +229,15 @@ public class PortalController {
     @GetMapping("terms")
     public String terms() {
         return "portal/terms";
+    }
+
+    private <T> List<T> limitList(List<T> list, int limit) {
+        if (list == null || list.isEmpty()) {
+            return list;
+        }
+        if (list.size() <= limit) {
+            return list;
+        }
+        return list.subList(0, limit);
     }
 }

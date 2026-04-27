@@ -145,31 +145,12 @@
         function submitHandler() {
             if ($.validate.form()) {
                 var sHTML = $('.summernote').summernote('code');
+                if (sHTML && sHTML.indexOf("data:image/") !== -1) {
+                    $.modal.alertError("检测到Base64图片，请先用上传按钮上传图片再提交");
+                    return;
+                }
                 $("#magazineContentInput").val(sHTML);
-                var formData = new FormData(document.getElementById("form-magazine-add"));
-                $.ajax({
-                    url: prefix + "/add",
-                    type: "post",
-                    dataType: "json",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function(xhr, settings) {
-                        var csrftoken = $('meta[name=csrf-token]').attr('content');
-                        if ($.common.equalsIgnoreCase(settings.type, "POST")) {
-                            xhr.setRequestHeader("X-CSRF-Token", csrftoken);
-                        }
-                        $.modal.loading("正在处理中，请稍候...");
-                        $.modal.disable();
-                    },
-                    success: function(result) {
-                        $.operate.successCallback(result);
-                    },
-                    error: function() {
-                        $.modal.closeLoading();
-                        $.modal.alertError("提交失败，请重试");
-                    }
-                });
+                $.operate.save(prefix + "/add", $('#form-magazine-add').serialize());
             }
         }
     </script>

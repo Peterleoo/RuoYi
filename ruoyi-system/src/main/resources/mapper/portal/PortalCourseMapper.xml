@@ -17,8 +17,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="tuitionFee" column="tuition_fee"/>
         <result property="enrollmentStatus" column="enrollment_status"/>
         <result property="status" column="status"/>
+        <result property="creatorId" column="creator_id"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
+        <result property="updaterId" column="updater_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
@@ -29,8 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPortalCourseVo">
         select c.course_id, c.school_id, c.course_name, c.course_category, c.teacher_id,
                c.cover_image, c.course_intro, c.class_schedule, c.replay_video_url,
-               c.tuition_fee, c.enrollment_status, c.status, c.create_by, c.create_time,
-               c.update_by, c.update_time, c.remark,
+               c.tuition_fee, c.enrollment_status, c.status, c.creator_id, c.create_by, c.create_time,
+               c.updater_id, c.update_by, c.update_time, c.remark,
                s.school_name, t.teacher_name
         from portal_course c
         left join portal_school s on c.school_id = s.school_id
@@ -60,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">
                 and c.status = #{status}
             </if>
+            ${params.dataScope}
         </where>
         order by c.course_id desc
     </select>
@@ -84,8 +87,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tuitionFee != null">tuition_fee,</if>
             <if test="enrollmentStatus != null">enrollment_status,</if>
             <if test="status != null">status,</if>
+            <if test="creatorId != null">creator_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="updaterId != null">updater_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -102,8 +107,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tuitionFee != null">#{tuitionFee},</if>
             <if test="enrollmentStatus != null">#{enrollmentStatus},</if>
             <if test="status != null">#{status},</if>
+            <if test="creatorId != null">#{creatorId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="updaterId != null">#{updaterId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -124,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tuitionFee != null">tuition_fee = #{tuitionFee},</if>
             <if test="enrollmentStatus != null">enrollment_status = #{enrollmentStatus},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

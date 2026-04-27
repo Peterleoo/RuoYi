@@ -988,7 +988,7 @@ var table = {
             },
             // 选卡页同一页签打开
             parentTab: function (title, url) {
-                var dataId = window.frameElement.getAttribute('data-id');
+                var dataId = window.frameElement ? window.frameElement.getAttribute('data-id') : null;
                 createMenuItem(url, title);
                 closeItem(dataId);
             },
@@ -1047,11 +1047,15 @@ var table = {
         operate: {
             // 提交数据
             submit: function(url, type, dataType, data, callback) {
+                var requestData = data;
+                if ($.common.equalsIgnoreCase(type, "POST")) {
+                    requestData = $.operate.normalizePostData(data);
+                }
                 var config = {
                     url: url,
                     type: type,
                     dataType: dataType,
-                    data: data,
+                    data: requestData,
                     beforeSend: function (xhr, settings) {
                         var csrftoken = $('meta[name=csrf-token]').attr('content');
                         if ($.common.equalsIgnoreCase(settings.type, "POST")) {
@@ -1229,13 +1233,22 @@ var table = {
                 var url = table.options.viewUrl.replace("{id}", id);
                 $.modal.popupRight(table.options.modalName + "信息详情", url);
             },
+            // 规避空参数名导致的 Tomcat InvalidParameterException（如 &=xxx / =xxx）
+            normalizePostData: function(data) {
+                if (typeof data !== "string") {
+                    return data;
+                }
+                var sanitized = data.replace(/(^|&)=([^&]*)/g, '$1');
+                sanitized = sanitized.replace(/&&+/g, '&').replace(/^&|&$/g, '');
+                return sanitized;
+            },
             // 保存信息 刷新表格
             save: function(url, data, callback) {
                 var config = {
                     url: url,
                     type: "post",
                     dataType: "json",
-                    data: data,
+                    data: $.operate.normalizePostData(data),
                     beforeSend: function (xhr, settings) {
                         var csrftoken = $('meta[name=csrf-token]').attr('content');
                         if (($.common.equalsIgnoreCase(settings.type, "POST"))) {
@@ -1259,7 +1272,7 @@ var table = {
                     url: url,
                     type: "post",
                     dataType: "json",
-                    data: data,
+                    data: $.operate.normalizePostData(data),
                     beforeSend: function (xhr, settings) {
                         var csrftoken = $('meta[name=csrf-token]').attr('content');
                         if (($.common.equalsIgnoreCase(settings.type, "POST"))) {
@@ -1289,7 +1302,7 @@ var table = {
                     url: url,
                     type: "post",
                     dataType: "json",
-                    data: data,
+                    data: $.operate.normalizePostData(data),
                     beforeSend: function (xhr, settings) {
                         var csrftoken = $('meta[name=csrf-token]').attr('content');
                         if (($.common.equalsIgnoreCase(settings.type, "POST"))) {

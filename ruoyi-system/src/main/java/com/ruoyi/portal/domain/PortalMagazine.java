@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 杂志管理对象 portal_magazine
@@ -47,11 +49,17 @@ public class PortalMagazine implements Serializable {
     /** 状态（0正常 1停用） */
     private String status;
 
+    /** 创建者ID */
+    private Long creatorId;
+
     /** 创建者 */
     private String createBy;
 
     /** 创建时间 */
     private Date createTime;
+
+    /** 更新者ID */
+    private Long updaterId;
 
     /** 更新者 */
     private String updateBy;
@@ -61,6 +69,7 @@ public class PortalMagazine implements Serializable {
 
     /** 备注 */
     private String remark;
+    private Map<String, Object> params;
 
     public void setMagazineId(Long magazineId) {
         this.magazineId = magazineId;
@@ -158,6 +167,14 @@ public class PortalMagazine implements Serializable {
         return createBy;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -172,6 +189,14 @@ public class PortalMagazine implements Serializable {
 
     public String getUpdateBy() {
         return updateBy;
+    }
+
+    public Long getUpdaterId() {
+        return updaterId;
+    }
+
+    public void setUpdaterId(Long updaterId) {
+        this.updaterId = updaterId;
     }
 
     public void setUpdateTime(Date updateTime) {
@@ -190,6 +215,17 @@ public class PortalMagazine implements Serializable {
         return remark;
     }
 
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -204,8 +240,10 @@ public class PortalMagazine implements Serializable {
                 .append("h5Url", getH5Url())
                 .append("introduction", getIntroduction())
                 .append("status", getStatus())
+                .append("creatorId", getCreatorId())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
+                .append("updaterId", getUpdaterId())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("remark", getRemark())
